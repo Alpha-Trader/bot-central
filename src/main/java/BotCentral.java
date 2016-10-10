@@ -5,6 +5,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  * @author christopher.guckes@torq-dev.de
@@ -14,21 +15,28 @@ public class BotCentral {
     /**
      * @var string
      */
-    private String apiUrl = "http://stable.alpha-trader.com/api/";
+    private static String apiUrl = "http://stable.alpha-trader.com/api/";
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        token = this.getToken();
-        this.getCompanies(token);
-        this.getBonds(token);
+        System.out.println(apiUrl);
+        String token = getToken(apiUrl);
+        System.out.println(token);
+        getCompanies(token,apiUrl);
+
+        getBonds(token,apiUrl);
     }
 
-    private String getToken() {
+    private static String getToken(String apiUrl)
+    {
         String token = "";
+
         try {
-            HttpResponse<JsonNode> response = Unirest.post(this.apiUrl + "user/token/")
+            System.out.println(apiUrl+ "user/token/");
+
+            HttpResponse<JsonNode> response = Unirest.post("http://stable.alpha-trader.com/user/token/")
                     .header("accept", "*/*").queryString("username", "Steerforth").field("password", "lollies")
                     .asJson();
             JSONObject body = response.getBody().getObject();
@@ -45,9 +53,9 @@ public class BotCentral {
         return token;
     }
 
-    private void getCompanies(String token) {
+    private static void getCompanies(String token, String apiUrl) {
         try {
-            HttpResponse<JsonNode> response = Unirest.get(this.apiUrl + "companies/")
+            HttpResponse<JsonNode> response = Unirest.get(apiUrl + "companies/")
                     .header("accept", "*/*").header("Authorization", "Bearer " + token)
                     .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
 
@@ -61,9 +69,9 @@ public class BotCentral {
         }
     }
 
-    private void getBonds(String token) {
+    private static void getBonds(String token,String apiUrl) {
         try {
-            HttpResponse<JsonNode> response = Unirest.get(this.apiUrl + "bonds/")
+            HttpResponse<JsonNode> response = Unirest.get( apiUrl+ "bonds/")
                     .header("accept", "*/*").header("Authorization", "Bearer " + token)
                     .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
 
