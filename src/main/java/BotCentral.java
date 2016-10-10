@@ -46,6 +46,22 @@ public class BotCentral {
 		} catch (UnirestException e) {
 			System.err.println("Error fetching companies: " + e.getMessage());
 		}
+	
+
+	try {
+		HttpResponse<JsonNode> response = Unirest.get("http://stable.alpha-trader.com/swagger-ui.html#!/bond-controller/listsBondsUsingGET")
+				.header("accept", "*/*").header("Authorization", "Bearer " + token)
+				.header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
+		
+		JSONArray companyNodes = response.getBody().getArray();
+		
+		for (int i = 0; i < companyNodes.length(); i++){
+			System.out.println(companyNodes.getJSONObject(i).toString(2));
+		}
+	} catch (UnirestException e) {System.err.println("Error fetching bonds : " + e.getMessage());
+		
+
 	}
 
+}
 }
