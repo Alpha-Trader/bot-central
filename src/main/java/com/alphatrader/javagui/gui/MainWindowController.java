@@ -10,6 +10,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 
+import java.text.DecimalFormat;
+
 /**
  * This controller handles all requests coming from the gui to our backend.
  *
@@ -101,6 +103,6 @@ public class MainWindowController {
      */
     private void displayCompany(Company company) {
         companyNameLabel.setText(company.getName() + " - " + company.getSecurityIdentifier());
-        cashLabel.setText("Cash: " + company.getCash());
+        cashLabel.setText("Cash: " + String.format("%.02f", company.getCash()));
     }
 }
