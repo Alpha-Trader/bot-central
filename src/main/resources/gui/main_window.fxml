@@ -36,7 +36,7 @@
    <left>
       <BorderPane BorderPane.alignment="CENTER">
          <center>
-            <ListView fx:id="companyListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="250.0" />
+            <ListView fx:id="companyListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" />
          </center>
          <bottom>
             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#refresh" text="Refresh" BorderPane.alignment="CENTER" />
@@ -44,7 +44,7 @@
       </BorderPane>
    </left>
    <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="200.0" prefWidth="300.0" BorderPane.alignment="CENTER">
          <children>
             <Label fx:id="companyNameLabel" text="Company Name">
                <font>
@@ -58,4 +58,7 @@
          </padding>
       </VBox>
    </center>
+   <right>
+      <ListView fx:id="notificationListView" prefHeight="200.0" prefWidth="300.0" BorderPane.alignment="CENTER" />
+   </right>
 </BorderPane>

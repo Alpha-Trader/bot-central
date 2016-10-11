@@ -15,73 +15,74 @@ import com.mashape.unirest.http.exceptions.UnirestException;
  * @version 1.0
  */
 public class User {
-	/**
-	 * The username.
-	 */
-	private final String username;
+    /**
+     * The username.
+     */
+    private final String username;
 
-	/**
-	 * De passwoord.
-	 */
-	private final String password;
+    /**
+     * De passwoord.
+     */
+    private final String password;
 
-	/**
-	 * The current session web token to use as login credentials.
-	 */
-	private String token;
+    /**
+     * The current session web token to use as login credentials.
+     */
+    private String token;
 
-	/**
-	 * Creates a new user object with the given parameters.
-	 * @param name the username
-	 * @param password the password
-   */
-	public User(String name, String password) {
-		this.username = name;
-		this.password = password;
-	}
+    /**
+     * Creates a new user object with the given parameters.
+     *
+     * @param name     the username
+     * @param password the password
+     */
+    public User(String name, String password) {
+        this.username = name;
+        this.password = password;
+    }
 
-	/**
-	 * Tries to log in you in and saves the token if successfull.
-	 * TODO: Error handling
-	 */
-	public void login() {
-		try {
-			HttpResponse<JsonNode> response = Unirest
-					.post(AppState.getInstance().getApiUrl() + "/user/token/")
-					.header("accept", "*/*")
-					.queryString("username", username)
-					.field("password", password)
-					.asJson();
-			JSONObject body = response.getBody().getObject();
+    /**
+     * Tries to log in you in and saves the token if successfull.
+     * TODO: Error handling
+     */
+    public void login() {
+        try {
+            HttpResponse<JsonNode> response = Unirest
+                .post(AppState.getInstance().getApiUrl() + "/user/token/")
+                .header("accept", "*/*")
+                .queryString("username", username)
+                .field("password", password)
+                .asJson();
+            JSONObject body = response.getBody().getObject();
 
-			if (body.optInt("code", -1) == 200) {
-				token = body.getString("message");
-			} else {
-				System.err.println("Login failed.");
-			}
-		} catch (UnirestException e) {
-			System.err.println("Login error: " + e.getMessage());
-		}
-	}
+            if (body.optInt("code", -1) == 200) {
+                token = body.getString("message");
+            } else {
+                System.err.println("Login failed.");
+            }
+        } catch (UnirestException e) {
+            System.err.println("Login error: " + e.getMessage());
+        }
+    }
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return username;
-	}
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return username;
+    }
 
-	/**
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
 
-	/**
-	 * @return the token
-	 */
-	public String getToken() {
-		return token;
-	}
+    /**
+     * @return the token
+     */
+    public String getToken() {
+        return token;
+    }
 }

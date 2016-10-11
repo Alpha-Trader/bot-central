@@ -3,6 +3,7 @@ package com.alphatrader.javagui;
 import java.io.IOException;
 import java.util.Optional;
 
+import com.alphatrader.javagui.control.BackgroundDaemon;
 import com.alphatrader.javagui.data.Bond;
 import com.alphatrader.javagui.data.Stock;
 import com.alphatrader.javagui.data.User;
@@ -45,12 +46,22 @@ public class BotCentral extends Application {
             // TODO: Check if login succeeded
             user.login();
             AppState.getInstance().setUser(user);
+            startBackgroundDaemon();
             startGui(stage);
         });
     }
 
     /**
+     * Runs background tasks for our app.
+     */
+    private void startBackgroundDaemon() {
+        BackgroundDaemon backgroundDaemon = new BackgroundDaemon();
+        backgroundDaemon.start();
+    }
+
+    /**
      * Starts the main window.
+     *
      * @param stage the primary stage of the app
      */
     private void startGui(final Stage stage) {
@@ -58,6 +69,7 @@ public class BotCentral extends Application {
             Pane root = (Pane) FXMLLoader.load(getClass().getResource("/gui/main_window.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);
+            stage.setMaximized(true);
             stage.show();
         } catch (IOException ioe) {
             System.err.println("Error loading the GUI.");
