@@ -29,6 +29,12 @@ public class MainWindowController {
     private Label companyNameLabel;
 
     /**
+     * Displays the company's cash reserves.
+     */
+    @FXML
+    private Label cashLabel;
+
+    /**
      * This function is called by JavaFX after all fxml fields are accessible.
      */
     @FXML
@@ -77,6 +83,7 @@ public class MainWindowController {
      * @param company the company to manage in the center screen
      */
     private void displayCompany(Company company) {
-        companyNameLabel.setText(company.getName());
+        companyNameLabel.setText(company.getName() + " - " + company.getSecurityIdentifier());
+        cashLabel.setText("Cash: " + company.getCash());
     }
 }

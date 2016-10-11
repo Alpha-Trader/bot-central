@@ -53,8 +53,9 @@ public class Company {
 		Company myReturn = new Company(
 				json.getString("name"),
 				json.getJSONObject("listing")
-					.getString("securityIdentifier")
-				);
+					.getString("securityIdentifier"),
+				json.getJSONObject("bankAccount").getDouble("cash")
+		);
 		return myReturn;
 	}
 
@@ -69,13 +70,19 @@ public class Company {
 	private final String securityIdentifier;
 
 	/**
+	 * The current amount of uncommitted cash.
+     */
+	private double cash;
+
+	/**
 	 * Creates a new Company object with the given parameters
 	 * @param name the company name
 	 * @param securityIdentifier the security identifier
    */
-	public Company(String name, String securityIdentifier) {
+	public Company(String name, String securityIdentifier, double cash) {
 		this.name = name;
 		this.securityIdentifier = securityIdentifier;
+		this.cash = cash;
 	}
 
 	/**
@@ -90,6 +97,13 @@ public class Company {
 	 */
 	public String getSecurityIdentifier() {
 		return securityIdentifier;
+	}
+
+	/**
+	 * @return the company's cash
+     */
+	public double getCash() {
+		return cash;
 	}
 
 	/* (non-Javadoc)
