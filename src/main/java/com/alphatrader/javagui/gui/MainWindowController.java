@@ -20,6 +20,8 @@ public class MainWindowController {
 
     @FXML
     public void initialize() {
+
+
         this.companyListView.setCellFactory(e -> {
             return new ListCell<Company>() {
                 protected void updateItem(Company company, boolean empty) {
