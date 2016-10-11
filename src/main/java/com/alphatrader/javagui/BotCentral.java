@@ -1,21 +1,13 @@
 package com.alphatrader.javagui;
 
+import java.util.Optional;
+
 import com.alphatrader.javagui.data.Bond;
-import com.alphatrader.javagui.data.Company;
+import com.alphatrader.javagui.data.Stock;
 import com.alphatrader.javagui.data.User;
 import com.alphatrader.javagui.gui.LoginDialog;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-
-import java.util.Optional;
 
 /**
  * Starts the app.
@@ -47,6 +39,7 @@ public class BotCentral extends Application {
             user.login();
             AppState.getInstance().setUser(user);
             System.out.println(Bond.getAllBonds());
+            System.out.println(Stock.getAllStocks());
         });
     }
 }
