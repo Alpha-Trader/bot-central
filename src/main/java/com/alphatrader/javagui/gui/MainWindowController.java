@@ -105,7 +105,9 @@ public class MainWindowController {
      * @param company the company to manage in the center screen
      */
     private void displayCompany(Company company) {
-        companyNameLabel.setText(company.getName() + " - " + company.getSecurityIdentifier());
-        cashLabel.setText("Cash: " + String.format("%.02f", company.getCash()));
+        if(company != null) {
+            companyNameLabel.setText(company.getName() + " - " + company.getSecurityIdentifier());
+            cashLabel.setText("Cash: " + String.format("%.02f", company.getCash()));
+        }
     }
 }
