@@ -1,5 +1,6 @@
 package com.alphatrader.javagui;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import com.alphatrader.javagui.data.Bond;
@@ -7,6 +8,9 @@ import com.alphatrader.javagui.data.Stock;
 import com.alphatrader.javagui.data.User;
 import com.alphatrader.javagui.gui.LoginDialog;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
@@ -16,19 +20,21 @@ import javafx.stage.Stage;
  * @version 1.0
  */
 public class BotCentral extends Application {
-  /**
-   * Launches the JavaFX app. Shouldn't do anything else!
-   * @param args commandline parameters
-   */
-  public static void main(String[] args) {
+    /**
+     * Launches the JavaFX app. Shouldn't do anything else!
+     *
+     * @param args commandline parameters
+     */
+    public static void main(String[] args) {
         launch(args);
     }
 
-  /**
-   * This is where the action takes place.
-   * @param stage the primary stage for our GUI
-   * @throws Exception whenever it feels like it
-   */
+    /**
+     * This is where the action takes place.
+     *
+     * @param stage the primary stage for our GUI
+     * @throws Exception whenever it feels like it
+     */
     @Override
     public void start(final Stage stage) throws Exception {
         // Ask for login parameters
@@ -38,8 +44,20 @@ public class BotCentral extends Application {
         userOpt.ifPresent(user -> {
             user.login();
             AppState.getInstance().setUser(user);
-            System.out.println(Bond.getAllBonds());
-            System.out.println(Stock.getAllStocks());
+
+            startGui(stage);
         });
+    }
+
+    private void startGui(final Stage stage) {
+        try {
+            Pane root = (Pane) FXMLLoader.load(getClass().getResource("/gui/main_window.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException ioe) {
+            System.err.println("Error loading the GUI.");
+            ioe.printStackTrace();
+        }
     }
 }
