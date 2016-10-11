@@ -40,15 +40,19 @@ public class BotCentral extends Application {
         // Ask for login parameters
         Optional<User> userOpt = (new LoginDialog().showAndWait());
 
-        // If the login was successful, load whatever you need
+        // If the user was provided, load whatever you need
         userOpt.ifPresent(user -> {
+            // TODO: Check if login succeeded
             user.login();
             AppState.getInstance().setUser(user);
-
             startGui(stage);
         });
     }
 
+    /**
+     * Starts the main window.
+     * @param stage the primary stage of the app
+     */
     private void startGui(final Stage stage) {
         try {
             Pane root = (Pane) FXMLLoader.load(getClass().getResource("/gui/main_window.fxml"));
