@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.text.Text;
 
 import java.text.DecimalFormat;
 
@@ -64,7 +65,9 @@ public class MainWindowController {
             protected void updateItem(Notification notification, boolean empty) {
                 super.updateItem(notification, empty);
                 if (notification != null) {
-                    setText(notification.getMessage());
+                    Text text = new Text(notification.getMessage());
+                    text.setWrappingWidth(e.getPrefWidth() * 0.9);
+                    setGraphic(text);
                 }
             }
         });
