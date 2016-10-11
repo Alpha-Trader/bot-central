@@ -63,7 +63,7 @@ public class Notification {
      */
     public static void markAllAsRead() {
         try {
-            HttpResponse<JsonNode> response = Unirest.put(AppState.getInstance().getApiUrl() + "/api/notifications/read/")
+            Unirest.put(AppState.getInstance().getApiUrl() + "/api/notifications/read/")
                 .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
                 .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
         } catch (UnirestException ue) {
