@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.alphatrader.javagui.AppState;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.mashape.unirest.http.HttpResponse;
@@ -44,31 +45,31 @@ public class Company {
 
         return myReturn;
     }
+
     /**
      * fetches all companies in the game
      */
-    
-    public static List<Company> getAllCompanies(){
-    	List<Company> myReturn = new ArrayList<>();
-    try {
-        HttpResponse<JsonNode> response = Unirest.get(AppState.getInstance().getApiUrl() + "/api/companies/all")
-            .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
-            .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
+
+    public static List<Company> getAllCompanies() {
+        List<Company> myReturn = new ArrayList<>();
+        try {
+            HttpResponse<JsonNode> response = Unirest.get(AppState.getInstance().getApiUrl() + "/api/companies/all/")
+                .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
+                .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
 
 
-        JSONArray companyNodes = response.getBody().getArray();
+            JSONArray companyNodes = response.getBody().getArray();
 
-        for (int i = 0; i < companyNodes.length(); i++) {
-            myReturn.add(Company.createFromJson(companyNodes.getJSONObject(i)));
+            for (int i = 0; i < companyNodes.length(); i++) {
+                myReturn.add(Company.createFromJson(companyNodes.getJSONObject(i)));
+            }
+
+        } catch (UnirestException e) {
+            System.err.println("Error fetching companies: " + e.getMessage());
         }
 
-    } catch (UnirestException e) {
-        System.err.println("Error fetching companies: " + e.getMessage());
+        return myReturn;
     }
-
-    return myReturn;
-    }
-
 
 
     /**
@@ -78,14 +79,27 @@ public class Company {
      * @return the parsed company
      */
     public static Company createFromJson(JSONObject json) {
-        Company myReturn = new Company(
-            json.getString("name"),
-            json.getJSONObject("listing")
-                .getString("securityIdentifier"),
-            json.getJSONObject("bankAccount").getDouble("cash")
-        );
+        Company myReturn = null;
+        try {
+            myReturn = new Company(
+                json.getString("id"),
+                json.getString("name"),
+                json.getJSONObject("listing")
+                    .getString("securityIdentifier"),
+                json.getString("securitiesAccountId"),
+                json.getJSONObject("bankAccount").getDouble("cash")
+            );
+        } catch (JSONException je) {
+            je.printStackTrace();
+            System.out.println(json.toString(2));
+        }
         return myReturn;
     }
+
+    /**
+     * The unique company identifier.
+     */
+    private final String id;
 
     /**
      * The company name.
@@ -98,19 +112,34 @@ public class Company {
     private final String securityIdentifier;
 
     /**
+     * The securities account id.
+     */
+    private final String securitiesAccountId;
+
+    /**
      * The current amount of uncommitted cash.
      */
     private double cash;
 
     /**
+     * The company's portfolio.
+     */
+    private Portfolio portfolio;
+
+    /**
      * Creates a new Company object with the given parameters
      *
-     * @param name               the company name
-     * @param securityIdentifier the security identifier
+     * @param id                  the unique company id
+     * @param name                the company name
+     * @param securityIdentifier  the security identifier
+     * @param securitiesAccountId the securities account id
+     * @param cash                the amount of uncommitted cash
      */
-    public Company(String name, String securityIdentifier, double cash) {
+    public Company(String id, String name, String securityIdentifier, String securitiesAccountId, double cash) {
+        this.id = id;
         this.name = name;
         this.securityIdentifier = securityIdentifier;
+        this.securitiesAccountId = securitiesAccountId;
         this.cash = cash;
     }
 
@@ -129,10 +158,36 @@ public class Company {
     }
 
     /**
+     * @return the securities accounts unique identifier.
+     */
+    public String getSecuritiesAccountId() {
+        return securitiesAccountId;
+    }
+
+    /**
      * @return the company's cash
      */
     public double getCash() {
         return cash;
+    }
+
+    /**
+     * @return the company's unique id.
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Returns the portfolio of this company. This call will be evaluated lazily to avoid congesting the server.
+     *
+     * @return the company's portfolio.
+     */
+    public Portfolio getPortfolio() {
+        if (this.portfolio == null) {
+            this.portfolio = Portfolio.getCompanyPortfolio(this);
+        }
+        return this.portfolio;
     }
 
     /* (non-Javadoc)
@@ -142,4 +197,5 @@ public class Company {
     public String toString() {
         return "Company [name=" + name + ", securityIdentifier=" + securityIdentifier + "]";
     }
+
 }
