@@ -4,11 +4,16 @@
 package com.alphatrader.javagui;
 
 import com.alphatrader.javagui.control.BackgroundDaemon;
+import com.alphatrader.javagui.data.Company;
 import com.alphatrader.javagui.data.Notification;
 import com.alphatrader.javagui.data.User;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Stores the state of the app. Implemented as a singleton to make sure, every
@@ -57,6 +62,11 @@ public class AppState {
     private ObservableList<Notification> notifications = FXCollections.observableArrayList();
 
     /**
+     * This hashmap stores the estimated value of each companies stocks.
+     */
+    private HashMap<String, Double> valuationMap = new HashMap<>();
+
+    /**
      * @return the current user
      */
     public User getUser() {
@@ -84,5 +94,12 @@ public class AppState {
      */
     public ObservableList<Notification> getNotifications() {
         return notifications;
+    }
+
+    /**
+     * @return the valuation map of every company in the game.
+     */
+    public Map<String, Double> getValuationMap() {
+        return valuationMap;
     }
 }
