@@ -62,14 +62,9 @@ public class BackgroundDaemon {
             List<Company> companies = Company.getAllCompanies();
 
             companies.forEach(company -> {
-                AppState.getInstance().getValuationMap().put(company.getId(), evaluate(company));
+                System.out.println("Evaluating " + company.getName());
+                AppState.getInstance().getValuationMap().put(company.getId(), company.getEstimatedStockValue());
             });
-        }
-
-        private Double evaluate(Company company) {
-            Double myReturn = company.getPortfolio().getEstimatedValue();
-            System.out.println(company.getName() + ": " + myReturn);
-            return myReturn;
         }
     }
 
@@ -81,6 +76,6 @@ public class BackgroundDaemon {
 
     public void start() {
         this.timer.schedule(new UpdateNotificationsTask(), 0, UpdateNotificationsTask.interval);
-        this.timer.schedule(new UpdateCompanyValuation(), 0, UpdateCompanyValuation.interval);
+        //this.timer.schedule(new UpdateCompanyValuation(), 0, UpdateCompanyValuation.interval);
     }
 }

@@ -2,6 +2,7 @@ package com.alphatrader.javagui.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.alphatrader.javagui.AppState;
 import org.json.JSONArray;
@@ -81,17 +82,28 @@ public class Company {
     public static Company createFromJson(JSONObject json) {
         Company myReturn = null;
         try {
+            HttpResponse<JsonNode> response = Unirest.get(
+                AppState.getInstance().getApiUrl() + "/api/companyprofiles/" + json.getString("id"))
+                .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
+                .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
+
+
+            int outstandingShares = response.getBody().getObject().getInt("outstandingShares");
+
             myReturn = new Company(
                 json.getString("id"),
                 json.getString("name"),
                 json.getJSONObject("listing")
                     .getString("securityIdentifier"),
                 json.getString("securitiesAccountId"),
-                json.getJSONObject("bankAccount").getDouble("cash")
+                json.getJSONObject("bankAccount").getDouble("cash"),
+                outstandingShares
             );
         } catch (JSONException je) {
             je.printStackTrace();
             System.out.println(json.toString(2));
+        } catch (UnirestException ue) {
+            ue.printStackTrace();
         }
         return myReturn;
     }
@@ -127,6 +139,11 @@ public class Company {
     private Portfolio portfolio;
 
     /**
+     * The number of company shares in circulation.
+     */
+    private int outstandingShares;
+
+    /**
      * Creates a new Company object with the given parameters
      *
      * @param id                  the unique company id
@@ -135,12 +152,18 @@ public class Company {
      * @param securitiesAccountId the securities account id
      * @param cash                the amount of uncommitted cash
      */
-    public Company(String id, String name, String securityIdentifier, String securitiesAccountId, double cash) {
+    public Company(String id,
+                   String name,
+                   String securityIdentifier,
+                   String securitiesAccountId,
+                   double cash,
+                   int outstandingShares) {
         this.id = id;
         this.name = name;
         this.securityIdentifier = securityIdentifier;
         this.securitiesAccountId = securitiesAccountId;
         this.cash = cash;
+        this.outstandingShares = outstandingShares;
     }
 
     /**
@@ -198,4 +221,16 @@ public class Company {
         return "Company [name=" + name + ", securityIdentifier=" + securityIdentifier + "]";
     }
 
+    public Double getEstimatedStockValue() {
+        Map<String, Double> companyValuation = AppState.getInstance().getValuationMap();
+
+        Double myReturn = companyValuation.get(this.getSecuritiesAccountId());
+
+        if(myReturn == null || myReturn.isNaN()) {
+            myReturn = this.getPortfolio().getEstimatedValue() / (double) this.outstandingShares;
+            companyValuation.put(this.getSecuritiesAccountId(), myReturn);
+        }
+
+        return myReturn;
+    }
 }

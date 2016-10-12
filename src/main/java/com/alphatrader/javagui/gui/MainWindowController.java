@@ -6,12 +6,21 @@ import com.alphatrader.javagui.data.Notification;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.List;
 
 /**
  * This controller handles all requests coming from the gui to our backend.
@@ -43,6 +52,12 @@ public class MainWindowController {
      */
     @FXML
     private Label cashLabel;
+
+    /**
+     * Displays the company's estimated stock value.
+     */
+    @FXML
+    private Label stockValueLabel;
 
     /**
      * This function is called by JavaFX after all fxml fields are accessible.
@@ -99,6 +114,22 @@ public class MainWindowController {
         System.exit(0);
     }
 
+    @FXML
+    private void displayCompanyValuations() {
+        try {
+            Parent root = (Parent) FXMLLoader.load(getClass().getResource("/gui/hashmap_display.fxml"));
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setTitle("Company Valuation");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException ioe) {
+            System.err.println("Error loading the GUI.");
+            ioe.printStackTrace();
+        }
+    }
+
     /**
      * Displays the selected company in the center screen.
      *
@@ -108,6 +139,7 @@ public class MainWindowController {
         if(company != null) {
             companyNameLabel.setText(company.getName() + " - " + company.getSecurityIdentifier());
             cashLabel.setText("Cash: " + String.format("%.02f", company.getCash()));
+            stockValueLabel.setText("est. Stock Value: " + String.format("%.02f", company.getEstimatedStockValue()));
         }
     }
 }

@@ -53,7 +53,11 @@ public class Portfolio {
 
         JSONArray positionsJson = json.getJSONArray("positions");
         for (int i = 0; i < positionsJson.length(); i++) {
-            positions.add(Position.createFromJson(positionsJson.getJSONObject(i)));
+            Position toAdd = Position.createFromJson(positionsJson.getJSONObject(i));
+
+            if (toAdd != null) {
+                positions.add(toAdd);
+            }
         }
 
         return new Portfolio(json.getDouble("cash"), json.getDouble("committedCash"), positions);
@@ -76,9 +80,10 @@ public class Portfolio {
 
     /**
      * Creates a new portfolio with the given parameters.
-     * @param cash the amount of cash
+     *
+     * @param cash          the amount of cash
      * @param committedCash the amount of committed cash
-     * @param positions a list of all positions.
+     * @param positions     a list of all positions.
      */
     public Portfolio(double cash, double committedCash, List<Position> positions) {
         this.cash = cash;
@@ -90,6 +95,6 @@ public class Portfolio {
      * @return the estimated value of this portfolio.
      */
     public Double getEstimatedValue() {
-        return Double.NaN;
+        return this.cash + this.positions.stream().map(Position::getVolume).reduce(0.0, (a, b) -> (a + b));
     }
 }

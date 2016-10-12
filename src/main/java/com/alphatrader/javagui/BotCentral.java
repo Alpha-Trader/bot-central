@@ -39,12 +39,14 @@ public class BotCentral extends Application {
     @Override
     public void start(final Stage stage) throws Exception {
         // Ask for login parameters
-        Optional<User> userOpt = (new LoginDialog().showAndWait());
+        Optional<User> userOpt = null;
+
+        userOpt = (new LoginDialog().showAndWait());
 
         // If the user was provided, load whatever you need
         userOpt.ifPresent(user -> {
-            // TODO: Check if login succeeded
             user.login();
+            // TODO: Check if login succeeded
             AppState.getInstance().setUser(user);
             startBackgroundDaemon();
             startGui(stage);
