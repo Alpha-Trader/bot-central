@@ -44,6 +44,32 @@ public class Company {
 
         return myReturn;
     }
+    /**
+     * fetches all companies in the game
+     */
+    
+    public static List<Company> getAllCompanies(){
+    	List<Company> myReturn = new ArrayList<>();
+    try {
+        HttpResponse<JsonNode> response = Unirest.get(AppState.getInstance().getApiUrl() + "/api/companies/all")
+            .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
+            .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
+
+
+        JSONArray companyNodes = response.getBody().getArray();
+
+        for (int i = 0; i < companyNodes.length(); i++) {
+            myReturn.add(Company.createFromJson(companyNodes.getJSONObject(i)));
+        }
+
+    } catch (UnirestException e) {
+        System.err.println("Error fetching companies: " + e.getMessage());
+    }
+
+    return myReturn;
+    }
+
+
 
     /**
      * Creates a Company object from the API's json response.
