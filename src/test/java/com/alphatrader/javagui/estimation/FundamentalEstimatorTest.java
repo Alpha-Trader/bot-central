@@ -19,9 +19,9 @@ public class FundamentalEstimatorTest {
 
     @Test
     public void testEvaluate() throws Exception {
-        Company testCompany = new Company(
+        /*Company testCompany = new Company(
 
-        );
+        );*/
 
     }
 
