@@ -90,4 +90,8 @@ public class Portfolio {
         this.committedCash = committedCash;
         this.positions = positions;
     }
+
+    public List<Position> getPositions() {
+        return positions;
+    }
 }

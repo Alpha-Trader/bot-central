@@ -23,13 +23,23 @@ class FundamentalEstimator extends Estimator {
 
     @Override
     public Double evaluate(Company company) {
-        // If the company we are looking for doesn't exist in the map, we need to refresh all.
+        Double myReturn = null;
+
+        // If the company we are looking for doesn't exist in the map, we return Double.NaN.
         if(!securityEstimation.containsKey(company.getSecurityIdentifier())) {
-            refresh(Company.getAllCompanies());
+            myReturn = Double.NaN;
+        } else {
+            myReturn = 1.0;
         }
 
-        
+        return myReturn;
+    }
 
-        return 0.0;
+    private Double recursiveEvaluation(Company company, int maxDepth) {
+        Double myReturn = company.getCash();
+
+        company.getPortfolio().getPositions();
+
+        return myReturn;
     }
 }
