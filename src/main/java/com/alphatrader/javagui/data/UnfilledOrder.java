@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.alphatrader.javagui.data;
 
@@ -20,23 +20,23 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 
 /**
  * @author frangelo
- *
  */
 public class UnfilledOrder {
-	 /**
+    /**
      * Fetches all unfilled orders  of the user
+     *
      * @return all unfilled orders
      */
-    public static  List<UnfilledOrder> getUnfilledOrders(Company company) {
+    public static List<UnfilledOrder> getUnfilledOrders(Company company) {
         List<UnfilledOrder> myReturn = new ArrayList<>();
 
         try {
-            HttpResponse<JsonNode> response = Unirest.get(AppState.getInstance().getApiUrl() + "/api/securityorders/securitiesaccount/"+company.getSecuritiesAccountId())
+            HttpResponse<JsonNode> response = Unirest.get(AppState.getInstance().getApiUrl() + "/api/securityorders/securitiesaccount/" + company.getSecuritiesAccountId())
                 .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
                 .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
 
 
-            JSONArray unfilledOrders= response.getBody().getArray();
+            JSONArray unfilledOrders = response.getBody().getArray();
 
             for (int i = 0; i < unfilledOrders.length(); i++) {
                 myReturn.add(UnfilledOrder.createFromJson(unfilledOrders.getJSONObject(i)));
@@ -48,6 +48,7 @@ public class UnfilledOrder {
 
         return myReturn;
     }
+
     /**
      * Creates a UnfilledOrder from the api json answers
      */
@@ -62,18 +63,19 @@ public class UnfilledOrder {
         );
         return myReturn;
     }
+
     /**
      * The date and time the order was created
      */
     private LocalDateTime creationDate;
-    
+
     /**
      * Name of Security
      */
     private String name;
-   /**
-    * Type of Security
-    */
+    /**
+     * Type of Security
+     */
     private String type;
     /**
      * Unique securityIdentifier of security
@@ -87,60 +89,65 @@ public class UnfilledOrder {
      * Volume of Order
      */
     private double volume;
-    
+
     public UnfilledOrder(LocalDateTime creationDate, String name, String type, String securityIdentifier, int numberOfShares, double volume) {
-       this.creationDate = creationDate;
-       this.name = name;
-       this.type = type;
-       this.volume = volume;
-       this.numberOfShares = numberOfShares;
-       this.securityIdentifier = securityIdentifier;
+        this.creationDate = creationDate;
+        this.name = name;
+        this.type = type;
+        this.volume = volume;
+        this.numberOfShares = numberOfShares;
+        this.securityIdentifier = securityIdentifier;
     }
+
     @Override
     public String toString() {
         return "UnfilledOrder{" +
             "name='" + name + '\'' +
             ", creationDate=" + creationDate +
-            ", type=" + type+
-            ", volume="+ volume+
+            ", type=" + type +
+            ", volume=" + volume +
             ", numberOfShares=" + numberOfShares +
             ", securityIdentifier=" + securityIdentifier +
             '}';
     }
-                                                                                                                                                                                                                                           
+
     /**
      * @return the volume
      */
     public double getVolume() {
         return volume;
     }
+
     /**
-     *@return the name
+     * @return the name
      */
-    public String getName(){
-     
-    	return name;
+    public String getName() {
+
+        return name;
     }
-    
+
     /**
-     * return the date of creation */
-    public LocalDateTime getcreationDate(){
-     
-    	return creationDate;
+     * return the date of creation
+     */
+    public LocalDateTime getcreationDate() {
+
+        return creationDate;
     }
+
     /**
      * @return the type of security
      */
-    public String getType(){
-    	return type;
-    }
-    public String getSecurityIdentifier(){
-    	return securityIdentifier;
+    public String getType() {
+        return type;
     }
 
-	public int getNumberOfShares(){
-		return numberOfShares;
-	}
+    public String getSecurityIdentifier() {
+        return securityIdentifier;
+    }
+
+    public int getNumberOfShares() {
+        return numberOfShares;
+    }
 }
 
 
