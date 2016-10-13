@@ -62,11 +62,6 @@ public class AppState {
     private ObservableList<Notification> notifications = FXCollections.observableArrayList();
 
     /**
-     * This hashmap stores the estimated value of each companies stocks.
-     */
-    private HashMap<String, Double> valuationMap = new HashMap<>();
-
-    /**
      * @return the current user
      */
     public User getUser() {
@@ -94,12 +89,5 @@ public class AppState {
      */
     public ObservableList<Notification> getNotifications() {
         return notifications;
-    }
-
-    /**
-     * @return the valuation map of every company in the game.
-     */
-    public Map<String, Double> getValuationMap() {
-        return valuationMap;
     }
 }

@@ -42,8 +42,9 @@ public class HashmapDisplayController {
 
     @FXML
     private void refresh() {
+        // TODO: choose hashmap to display
         this.hashmapListView.itemsProperty().set(FXCollections.observableList(
-            new ArrayList<>(AppState.getInstance().getValuationMap().entrySet()))
+            new ArrayList<>())
         );
     }
 }
