@@ -3,6 +3,9 @@
  */
 package com.alphatrader.javagui.data;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,15 +52,16 @@ public class Stock {
 
     /**
      * Creates a Stock from the api json answers.
-     *
+     * corrected
      * @param json the json object you want to parse
      * @return the parsed stock
      */
 
     public static Stock createFromJson(JSONObject json) {
         Stock myReturn = new Stock(json.getString("name"), json.getString("securityIdentifier"),
-            json.getInt("startDate"));
-        return myReturn;
+        		LocalDateTime.ofInstant(Instant.ofEpochMilli(json.getLong("startDate")), ZoneId.systemDefault())
+    );
+    return myReturn; 
     }
 
     /**
@@ -73,7 +77,7 @@ public class Stock {
     /**
      * The stock's issue date
      */
-    private int startDate;
+    private LocalDateTime startDate;
 
     /**
      * Creates a new Stock with the given Parameters
@@ -82,7 +86,7 @@ public class Stock {
      * @param securityIdentifier
      * @param startDate
      */
-    public Stock(String name, String securityIdentifier, int startDate) {
+    public Stock(String name, String securityIdentifier, LocalDateTime startDate) {
         this.name = name;
         this.securityIdentifier = securityIdentifier;
         this.startDate = startDate;
@@ -105,7 +109,7 @@ public class Stock {
     /**
      * @return the date the listing was issued
      */
-    public int getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
