@@ -94,7 +94,6 @@ public class Company {
                 .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
                 .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
 
-
             int outstandingShares = response.getBody().getObject().getInt("outstandingShares");
 
             myReturn = new Company(

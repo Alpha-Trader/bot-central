@@ -20,7 +20,7 @@ public class Position {
     public static Position createFromJson(JSONObject json) {
         Position myReturn = null;
         try {
-            new Position(
+            myReturn = new Position(
                 json.getString("securityIdentifier"),
                 json.getInt("numberOfShares"),
                 json.getDouble("volume")
