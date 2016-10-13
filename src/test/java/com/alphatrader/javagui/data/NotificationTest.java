@@ -63,11 +63,6 @@ public class NotificationTest {
     }
 
     @Test
-    public void testToString() throws Exception {
-        assertEquals("Notification{message='Church of Scientology AG: Your order was filled: LIMIT BUY 1 shares of gierigundstolz Inc. (STG6CFBB) at 0.02.', date=2016-10-13T19:28:58.684}", toTest.toString());
-    }
-
-    @Test
     public void testGetMessage() throws Exception {
         assertEquals("Church of Scientology AG: Your order was filled: LIMIT BUY 1 shares of gierigundstolz Inc. (STG6CFBB) at 0.02.", toTest.getMessage());
     }

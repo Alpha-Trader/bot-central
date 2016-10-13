@@ -10,17 +10,18 @@ import static org.junit.Assert.*;
  * @version 1.0
  */
 public class FundamentalEstimatorTest {
-
+    Estimator toTest = Estimator.get(Estimator.EstimatorType.FUNDAMENTAL);
 
     @Test
-    public void refresh() throws Exception {
+    public void testRefresh() throws Exception {
 
     }
 
     @Test
-    public void evaluate() throws Exception {
-        //Company testCompany = new Company();
+    public void testEvaluate() throws Exception {
+        Company testCompany = new Company(
 
+        );
 
     }
 

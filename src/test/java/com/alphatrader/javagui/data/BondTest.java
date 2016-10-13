@@ -105,10 +105,4 @@ public class BondTest {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(1476387663798L), ZoneId.systemDefault());
         assertEquals(localDateTime, toTest.getMaturityDate());
     }
-
-    @Test
-    public void testToString() throws Exception {
-        assertEquals("Bond{name='Steffen Inc. 2.0500% 13/10/2016', volume=100000, interestRate=2.05, faceValue=100.0, maturityDate=2016-10-13T21:41:03.798}", toTest.toString());
-    }
-
 }

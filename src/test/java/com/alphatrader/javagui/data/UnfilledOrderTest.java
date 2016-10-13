@@ -47,11 +47,6 @@ public class UnfilledOrderTest {
     }
 
     @Test
-    public void testToString() throws Exception {
-        assertEquals("UnfilledOrder{name='gierigundstolz Inc.', creationDate=2016-10-05T00:16:15.635, type=STOCK, volume=0.0, numberOfShares=39359, securityIdentifier=STG6CFBB}", toTest.toString());
-    }
-
-    @Test
     public void testGetName() throws Exception {
         assertEquals("gierigundstolz Inc.", toTest.getName());
     }

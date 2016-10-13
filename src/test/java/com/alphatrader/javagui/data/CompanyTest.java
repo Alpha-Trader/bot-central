@@ -55,9 +55,4 @@ public class CompanyTest {
     public void testGetId() throws Exception {
         assertEquals("43986f13-edde-486c-9ef0-718b100a1949", toTest.getId());
     }
-
-    @Test
-    public void testToString() throws Exception {
-        assertEquals("Company [name=Katholische Kirche AG, securityIdentifier=STK0F513]", toTest.toString());
-    }
 }

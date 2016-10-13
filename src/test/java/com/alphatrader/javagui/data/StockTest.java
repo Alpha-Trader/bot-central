@@ -52,9 +52,4 @@ public class StockTest {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(1469950288064L), ZoneId.systemDefault());
         assertEquals(localDateTime, toTest.getStartDate());
     }
-
-    @Test
-    public void testToString() throws Exception {
-        assertEquals("Stock{name='Solid Profit AG', securityIdentifier=STS63548, startDate=2016-07-31T09:31:28.064}", toTest.toString());
-    }
 }
