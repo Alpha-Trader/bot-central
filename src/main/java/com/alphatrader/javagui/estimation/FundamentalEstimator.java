@@ -25,11 +25,9 @@ class FundamentalEstimator extends Estimator {
         this.companies.forEach(company -> {
             Double value = company.getPortfolio().getPositions().stream().map(Position::getVolume).reduce(0.0, (a, b) -> (a + b));
             value += company.getCash();
-            System.out.println(company.getName() + " has portfolio value " + value);
             securityEstimation.put(company.getSecurityIdentifier(), value / company.getOutstandingShares());
         });
 
-        System.out.println("Starting recursion");
         recursiveEvaluation();
     }
 
@@ -49,7 +47,6 @@ class FundamentalEstimator extends Estimator {
 
     private void recursiveEvaluation() {
         for (int i = 0; i < ITERATIONS; i++) {
-            System.out.println("###### ITERATION " + i + "######");
             companies.forEach(company -> {
                 Double value = company
                     .getPortfolio()
@@ -67,13 +64,6 @@ class FundamentalEstimator extends Estimator {
                     .reduce(0.0, (a, b) -> (a + b));
 
                 value /= (double) company.getOutstandingShares();
-
-                System.out.println(
-                    "Refined " + company.getName()
-                        + " from " + securityEstimation.get(company.getSecurityIdentifier())
-                        + " to " + value
-                );
-
                 securityEstimation.put(company.getSecurityIdentifier(), value);
             });
         }
