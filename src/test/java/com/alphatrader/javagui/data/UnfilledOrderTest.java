@@ -48,7 +48,7 @@ public class UnfilledOrderTest {
 
     @Test
     public void testToString() throws Exception {
-        assertEquals("UnfilledOrder{name='gierigundstolz Inc.', creationDate=2016-10-05T00:16:15.635, type=STG6CFBB, volume=0.0, numberOfShares=39359, securityIdentifier=STOCK}", toTest.toString());
+        assertEquals("UnfilledOrder{name='gierigundstolz Inc.', creationDate=2016-10-05T00:16:15.635, type=STOCK, volume=0.0, numberOfShares=39359, securityIdentifier=STG6CFBB}", toTest.toString());
     }
 
     @Test
@@ -64,8 +64,7 @@ public class UnfilledOrderTest {
 
     @Test
     public void testGetType() throws Exception {
-        // TODO: clear up types (Stock <-> Limit)
-        assertEquals("LIMIT", toTest.getType());
+        assertEquals("STOCK", toTest.getType());
     }
 
     @Test
