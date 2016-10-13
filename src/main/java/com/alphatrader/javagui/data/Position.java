@@ -1,5 +1,6 @@
 package com.alphatrader.javagui.data;
 
+import com.alphatrader.javagui.AppState;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,6 +13,7 @@ import org.json.JSONObject;
 public class Position {
     /**
      * Creates a new portfolio position from an API JSON response.
+     *
      * @param json the json to parse
      * @return the parsed position object
      */
@@ -23,7 +25,7 @@ public class Position {
                 json.getInt("numberOfShares"),
                 json.getDouble("volume")
             );
-        } catch(JSONException je) {
+        } catch (JSONException je) {
             System.out.print(json.toString(2));
             je.printStackTrace();
         }
@@ -53,9 +55,10 @@ public class Position {
 
     /**
      * Creates a new position object with the given parameters.
+     *
      * @param securityIdentifier the security identifier
-     * @param numberOfShares the number of shares
-     * @param volume the overall volume
+     * @param numberOfShares     the number of shares
+     * @param volume             the overall volume
      */
     public Position(String securityIdentifier, int numberOfShares, double volume) {
         this.securityIdentifier = securityIdentifier;
@@ -90,5 +93,18 @@ public class Position {
      */
     public double getVolume() {
         return volume;
+    }
+
+    /**
+     * @return the estimated value based on our own iterations.
+     */
+    public Double getEstimatedValue() {
+        Double myReturn = AppState.getInstance().getValuationMap().get(this.getSecurityIdentifier());
+
+        if(myReturn == null || myReturn.isNaN()) {
+            myReturn = this.getLastPrice();
+        }
+
+        return myReturn * this.getNumberOfShares();
     }
 }

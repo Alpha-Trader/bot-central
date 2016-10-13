@@ -32,7 +32,7 @@ public class HashmapDisplayController {
             protected void updateItem(Map.Entry entry, boolean empty) {
                 super.updateItem(entry, empty);
                 if (entry != null) {
-                    setText(entry.getKey().toString() + ": " + entry.getValue().toString());
+                    setText(entry.getKey().toString() + ": " + String.format("%.02f", entry.getValue()));
                 }
             }
         });

@@ -5,10 +5,7 @@ import com.alphatrader.javagui.data.Company;
 import com.alphatrader.javagui.data.Notification;
 import javafx.application.Platform;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 /**
  * Runs recurring tasks in the background.
@@ -52,19 +49,27 @@ public class BackgroundDaemon {
         /**
          * Interval at which to refresh our valuation.
          */
-        static int interval = 3600 * 1000;
+        static final int interval = 3600 * 1000;
+
+        private static final int ITERATIONS = 0;
 
         /**
          * The work this task should do regularly.
          */
         @Override
         public void run() {
-            List<Company> companies = Company.getAllCompanies();
+            final List<Company> companies = Company.getAllCompanies();
+            final Map<String, Double> valuations = AppState.getInstance().getValuationMap();
 
-            companies.forEach(company -> {
-                System.out.println("Evaluating " + company.getName());
-                AppState.getInstance().getValuationMap().put(company.getId(), company.getEstimatedStockValue());
-            });
+            // Get naiive evaluation by just evaluating the company value.
+            companies.forEach(company -> valuations.put(company.getSecurityIdentifier(), company.getEstimatedStockValue()));
+
+            // Get better results by iterating over the cashed values, thereby flattening and eventually converging
+            // towards better results.
+            for(int i = 0; i < ITERATIONS; i++) {
+                System.out.println("################### Iteration " + i + " ###################");
+                companies.forEach(company -> valuations.put(company.getSecurityIdentifier(), company.getEstimatedStockValue()));
+            }
         }
     }
 
@@ -76,6 +81,6 @@ public class BackgroundDaemon {
 
     public void start() {
         this.timer.schedule(new UpdateNotificationsTask(), 0, UpdateNotificationsTask.interval);
-        //this.timer.schedule(new UpdateCompanyValuation(), 0, UpdateCompanyValuation.interval);
+        this.timer.schedule(new UpdateCompanyValuation(), 0, UpdateCompanyValuation.interval);
     }
 }

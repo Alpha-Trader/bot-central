@@ -95,6 +95,6 @@ public class Portfolio {
      * @return the estimated value of this portfolio.
      */
     public Double getEstimatedValue() {
-        return this.cash + this.positions.stream().map(Position::getVolume).reduce(0.0, (a, b) -> (a + b));
+        return this.cash + this.positions.stream().map(Position::getEstimatedValue).reduce(0.0, (a, b) -> (a + b));
     }
 }

@@ -1,6 +1,7 @@
 package com.alphatrader.javagui.data;
 
 import java.util.ArrayList;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 
@@ -54,16 +55,22 @@ public class Company {
     public static List<Company> getAllCompanies() {
         List<Company> myReturn = new ArrayList<>();
         try {
+            long start = System.nanoTime();
             HttpResponse<JsonNode> response = Unirest.get(AppState.getInstance().getApiUrl() + "/api/companies/all/")
                 .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
                 .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
-
+            long end1 = System.nanoTime();
 
             JSONArray companyNodes = response.getBody().getArray();
+            long end2 = System.nanoTime();
 
             for (int i = 0; i < companyNodes.length(); i++) {
                 myReturn.add(Company.createFromJson(companyNodes.getJSONObject(i)));
             }
+            long end3 = System.nanoTime();
+
+            System.out.println("API-Call: " + (end1 - start) + "ns\nGetting array: " + (end2 - end1) + "ns\nParsing: "
+                + (end3 - end2) + "ns");
 
         } catch (UnirestException e) {
             System.err.println("Error fetching companies: " + e.getMessage());
@@ -221,14 +228,25 @@ public class Company {
         return "Company [name=" + name + ", securityIdentifier=" + securityIdentifier + "]";
     }
 
+    /**
+     * @return the estimated value of this company
+     */
     public Double getEstimatedStockValue() {
+        // TODO fix iterative flattening.
+
         Map<String, Double> companyValuation = AppState.getInstance().getValuationMap();
 
-        Double myReturn = companyValuation.get(this.getSecuritiesAccountId());
-
-        if(myReturn == null || myReturn.isNaN()) {
+        Double myReturn = Double.NaN;
+        if (myReturn.isNaN()) {
             myReturn = this.getPortfolio().getEstimatedValue() / (double) this.outstandingShares;
-            companyValuation.put(this.getSecuritiesAccountId(), myReturn);
+
+            if (!myReturn.equals(companyValuation.get(this.getSecurityIdentifier()))) {
+                System.out.println("Correcting valuation from " + companyValuation.get(this.getSecurityIdentifier()) + " to " + myReturn);
+            }
+
+            companyValuation.put(this.getSecurityIdentifier(), myReturn);
+        } else {
+            //System.out.println("Using cached value!");
         }
 
         return myReturn;
