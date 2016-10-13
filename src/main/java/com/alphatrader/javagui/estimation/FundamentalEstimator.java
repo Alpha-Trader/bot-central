@@ -22,7 +22,7 @@ class FundamentalEstimator extends Estimator {
     public void refresh(List<Company> companies) {
         this.companies = companies;
         securityEstimation = new HashMap<>();
-        this.companies.forEach(company -> {
+        this.companies.stream().forEach(company -> {
             Double value = company.getPortfolio().getPositions().stream().map(Position::getVolume).reduce(0.0, (a, b) -> (a + b));
             value += company.getCash();
             securityEstimation.put(company.getSecurityIdentifier(), value / company.getOutstandingShares());

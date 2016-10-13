@@ -52,15 +52,12 @@ public class BackgroundDaemon {
          */
         static final int interval = 3600 * 1000;
 
-        private static final int ITERATIONS = 0;
-
         /**
          * The work this task should do regularly.
          */
         @Override
         public void run() {
             final List<Company> companies = Company.getAllCompanies();
-            final Map<String, Double> valuations = AppState.getInstance().getValuationMap();
 
             // Get naiive evaluation by just evaluating the company value.
             Estimator estimator = Estimator.get(Estimator.EstimatorType.FUNDAMENTAL);
