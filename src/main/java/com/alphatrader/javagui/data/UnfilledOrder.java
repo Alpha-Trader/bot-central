@@ -58,8 +58,7 @@ public class UnfilledOrder {
             json.getJSONObject("listing").getString("name"),
             json.getJSONObject("listing").getString("securityIdentifier"),
             json.getJSONObject("listing").getString("type"),
-            json.getInt("numberOfShares"),
-            json.getDouble("volume")
+            json.getInt("numberOfShares")
         );
         return myReturn;
     }
@@ -90,11 +89,10 @@ public class UnfilledOrder {
      */
     private double volume;
 
-    public UnfilledOrder(LocalDateTime creationDate, String name, String type, String securityIdentifier, int numberOfShares, double volume) {
+    public UnfilledOrder(LocalDateTime creationDate, String name, String type, String securityIdentifier, int numberOfShares) {
         this.creationDate = creationDate;
         this.name = name;
         this.type = type;
-        this.volume = volume;
         this.numberOfShares = numberOfShares;
         this.securityIdentifier = securityIdentifier;
     }
@@ -111,12 +109,6 @@ public class UnfilledOrder {
             '}';
     }
 
-    /**
-     * @return the volume
-     */
-    public double getVolume() {
-        return volume;
-    }
 
     /**
      * @return the name
