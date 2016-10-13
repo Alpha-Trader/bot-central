@@ -3,6 +3,7 @@ package com.alphatrader.javagui.gui;
 import com.alphatrader.javagui.AppState;
 import com.alphatrader.javagui.data.Company;
 import com.alphatrader.javagui.data.Notification;
+import com.alphatrader.javagui.estimation.Estimator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -139,7 +140,8 @@ public class MainWindowController {
         if(company != null) {
             companyNameLabel.setText(company.getName() + " - " + company.getSecurityIdentifier());
             cashLabel.setText("Cash: " + String.format("%.02f", company.getCash()));
-            stockValueLabel.setText("est. Stock Value: " + String.format("%.02f", Double.NaN));
+            stockValueLabel.setText("est. Stock Value: "
+                + String.format("%.02f", Estimator.get(Estimator.EstimatorType.FUNDAMENTAL).evaluate(company)));
         }
     }
 }
