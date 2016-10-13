@@ -35,11 +35,7 @@ public abstract class Estimator {
         return estimators.get(type);
     }
 
-    protected List<Company> companies;
-
-    Estimator() {
-        this.companies = Company.getAllCompanies();
-    }
+    List<Company> companies = new LinkedList<>();
 
     public abstract void refresh(List<Company> companies);
 

@@ -226,4 +226,16 @@ public class Company {
     public String toString() {
         return "Company [name=" + name + ", securityIdentifier=" + securityIdentifier + "]";
     }
+
+    public int getOutstandingShares() {
+        return outstandingShares;
+    }
+
+    /**
+     * Sets the company portfolio to the provided one.
+     * @param portfolio the new portfolio
+     */
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+    }
 }

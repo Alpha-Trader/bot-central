@@ -3,6 +3,7 @@ package com.alphatrader.javagui.control;
 import com.alphatrader.javagui.AppState;
 import com.alphatrader.javagui.data.Company;
 import com.alphatrader.javagui.data.Notification;
+import com.alphatrader.javagui.estimation.Estimator;
 import javafx.application.Platform;
 
 import java.util.*;
@@ -62,7 +63,10 @@ public class BackgroundDaemon {
             final Map<String, Double> valuations = AppState.getInstance().getValuationMap();
 
             // Get naiive evaluation by just evaluating the company value.
-            companies.forEach(company -> valuations.put(company.getSecurityIdentifier(), Double.NaN));
+            Estimator estimator = Estimator.get(Estimator.EstimatorType.FUNDAMENTAL);
+            System.out.println("Refreshing");
+            estimator.refresh(companies);
+            System.out.println("Done");
         }
     }
 
