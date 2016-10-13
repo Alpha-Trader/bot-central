@@ -89,7 +89,7 @@ public class UnfilledOrder {
      */
     private double volume;
 
-    public UnfilledOrder(LocalDateTime creationDate, String name, String type, String securityIdentifier, int numberOfShares) {
+    public UnfilledOrder(LocalDateTime creationDate, String name, String securityIdentifier, String type, int numberOfShares) {
         this.creationDate = creationDate;
         this.name = name;
         this.type = type;
