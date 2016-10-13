@@ -27,11 +27,11 @@ public class UnfilledOrder {
      * Fetches all unfilled orders  of the user
      * @return all unfilled orders
      */
-    public static  List<UnfilledOrder> getUnfilledOrders() {
+    public static  List<UnfilledOrder> getUnfilledOrders(Company company) {
         List<UnfilledOrder> myReturn = new ArrayList<>();
 
         try {
-            HttpResponse<JsonNode> response = Unirest.get(AppState.getInstance().getApiUrl() + "/api/securityorders/securitiesaccount/"+Company.Id)
+            HttpResponse<JsonNode> response = Unirest.get(AppState.getInstance().getApiUrl() + "/api/securityorders/securitiesaccount/"+company.getSecuritiesAccountId())
                 .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
                 .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
 
@@ -107,7 +107,7 @@ public class UnfilledOrder {
             ", securityIdentifier=" + securityIdentifier +
             '}';
     }
-
+                                                                                                                                                                                                                                           
     /**
      * @return the volume
      */
