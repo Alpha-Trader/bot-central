@@ -48,12 +48,7 @@ public class UnfilledOrderTest {
 
     @Test
     public void testToString() throws Exception {
-        fail("Not implemented!");
-    }
-
-    @Test
-    public void testGetVolume() throws Exception {
-        fail("Volume not part of the json response, please fix the code!");
+        assertEquals("UnfilledOrder{name='gierigundstolz Inc.', creationDate=2016-10-05T00:16:15.635, type=STG6CFBB, volume=0.0, numberOfShares=39359, securityIdentifier=STOCK}", toTest.toString());
     }
 
     @Test

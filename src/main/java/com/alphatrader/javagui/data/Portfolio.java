@@ -90,11 +90,4 @@ public class Portfolio {
         this.committedCash = committedCash;
         this.positions = positions;
     }
-
-    /**
-     * @return the estimated value of this portfolio.
-     */
-    public Double getEstimatedValue() {
-        return this.cash + this.positions.stream().map(Position::getEstimatedValue).reduce(0.0, (a, b) -> (a + b));
-    }
 }

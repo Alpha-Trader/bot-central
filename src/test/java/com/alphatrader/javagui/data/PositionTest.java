@@ -67,9 +67,4 @@ public class PositionTest {
     public void testGetVolume() throws Exception {
         assertEquals(4930.56, toTest.getVolume(), 0.0001);
     }
-
-    @Test
-    public void testGetEstimatedValue() throws Exception {
-        fail("Not implemented yet!");
-    }
 }

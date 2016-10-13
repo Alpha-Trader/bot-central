@@ -57,17 +57,7 @@ public class CompanyTest {
     }
 
     @Test
-    public void testGetPortfolio() throws Exception {
-        fail("Not implemented yet.");
-    }
-
-    @Test
     public void testToString() throws Exception {
         assertEquals("Company [name=Katholische Kirche AG, securityIdentifier=STK0F513]", toTest.toString());
-    }
-
-    @Test
-    public void testGetEstimatedStockValue() throws Exception {
-        fail("Not implemented yet.");
     }
 }

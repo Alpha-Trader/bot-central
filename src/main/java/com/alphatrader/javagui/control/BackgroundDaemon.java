@@ -62,14 +62,7 @@ public class BackgroundDaemon {
             final Map<String, Double> valuations = AppState.getInstance().getValuationMap();
 
             // Get naiive evaluation by just evaluating the company value.
-            companies.forEach(company -> valuations.put(company.getSecurityIdentifier(), company.getEstimatedStockValue()));
-
-            // Get better results by iterating over the cashed values, thereby flattening and eventually converging
-            // towards better results.
-            for(int i = 0; i < ITERATIONS; i++) {
-                System.out.println("################### Iteration " + i + " ###################");
-                companies.forEach(company -> valuations.put(company.getSecurityIdentifier(), company.getEstimatedStockValue()));
-            }
+            companies.forEach(company -> valuations.put(company.getSecurityIdentifier(), Double.NaN));
         }
     }
 

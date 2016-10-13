@@ -94,17 +94,4 @@ public class Position {
     public double getVolume() {
         return volume;
     }
-
-    /**
-     * @return the estimated value based on our own iterations.
-     */
-    public Double getEstimatedValue() {
-        Double myReturn = AppState.getInstance().getValuationMap().get(this.getSecurityIdentifier());
-
-        if(myReturn == null || myReturn.isNaN()) {
-            myReturn = this.getLastPrice();
-        }
-
-        return myReturn * this.getNumberOfShares();
-    }
 }

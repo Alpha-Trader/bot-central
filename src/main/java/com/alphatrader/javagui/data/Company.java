@@ -226,28 +226,4 @@ public class Company {
     public String toString() {
         return "Company [name=" + name + ", securityIdentifier=" + securityIdentifier + "]";
     }
-
-    /**
-     * @return the estimated value of this company
-     */
-    public Double getEstimatedStockValue() {
-        // TODO fix iterative flattening.
-
-        Map<String, Double> companyValuation = AppState.getInstance().getValuationMap();
-
-        Double myReturn = Double.NaN;
-        if (myReturn.isNaN()) {
-            myReturn = this.getPortfolio().getEstimatedValue() / (double) this.outstandingShares;
-
-            if (!myReturn.equals(companyValuation.get(this.getSecurityIdentifier()))) {
-                System.out.println("Correcting valuation from " + companyValuation.get(this.getSecurityIdentifier()) + " to " + myReturn);
-            }
-
-            companyValuation.put(this.getSecurityIdentifier(), myReturn);
-        } else {
-            //System.out.println("Using cached value!");
-        }
-
-        return myReturn;
-    }
 }

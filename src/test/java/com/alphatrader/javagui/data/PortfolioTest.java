@@ -53,9 +53,4 @@ public class PortfolioTest {
     public void testCreateFromJson() throws Exception {
         assertNotNull(toTest);
     }
-
-    @Test
-    public void testGetEstimatedValue() throws Exception {
-        assertEquals(1400, toTest.getEstimatedValue(), 0.0001);
-    }
 }

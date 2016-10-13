@@ -139,7 +139,7 @@ public class MainWindowController {
         if(company != null) {
             companyNameLabel.setText(company.getName() + " - " + company.getSecurityIdentifier());
             cashLabel.setText("Cash: " + String.format("%.02f", company.getCash()));
-            stockValueLabel.setText("est. Stock Value: " + String.format("%.02f", company.getEstimatedStockValue()));
+            stockValueLabel.setText("est. Stock Value: " + String.format("%.02f", Double.NaN));
         }
     }
 }

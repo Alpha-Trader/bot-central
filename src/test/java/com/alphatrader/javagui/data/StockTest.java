@@ -55,7 +55,6 @@ public class StockTest {
 
     @Test
     public void testToString() throws Exception {
-        fail("Not implemented yet!");
+        assertEquals("Stock{name='Solid Profit AG', securityIdentifier=STS63548, startDate=2016-07-31T09:31:28.064}", toTest.toString());
     }
-
 }
