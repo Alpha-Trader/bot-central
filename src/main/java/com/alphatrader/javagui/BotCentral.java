@@ -1,13 +1,13 @@
 package com.alphatrader.javagui;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Optional;
 
 import com.alphatrader.javagui.control.BackgroundDaemon;
-import com.alphatrader.javagui.data.Bond;
-import com.alphatrader.javagui.data.Stock;
-import com.alphatrader.javagui.data.User;
 import com.alphatrader.javagui.gui.LoginDialog;
+import com.alphatrader.rest.User;
+import com.alphatrader.rest.util.Config;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -38,10 +38,10 @@ public class BotCentral extends Application {
      */
     @Override
     public void start(final Stage stage) throws Exception {
-        // Ask for login parameters
-        Optional<User> userOpt = null;
+        Config.getInstance().setApiUrl(new URL(AppState.getInstance().getApiUrl()));
 
-        userOpt = (new LoginDialog().showAndWait());
+        // Ask for login parameters
+        Optional<User> userOpt = (new LoginDialog().showAndWait());
 
         // If the user was provided, load whatever you need
         userOpt.ifPresent(user -> {

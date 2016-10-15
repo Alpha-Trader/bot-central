@@ -1,6 +1,6 @@
 package com.alphatrader.javagui.estimation;
 
-import com.alphatrader.javagui.data.Company;
+import com.alphatrader.rest.Company;
 
 import java.util.*;
 

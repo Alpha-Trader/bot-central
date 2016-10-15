@@ -1,7 +1,7 @@
 package com.alphatrader.javagui.estimation;
 
-import com.alphatrader.javagui.data.Company;
-import com.alphatrader.javagui.data.Portfolio;
+import com.alphatrader.rest.Company;
+import com.alphatrader.rest.Portfolio;
 import org.json.JSONObject;
 import org.junit.Test;
 

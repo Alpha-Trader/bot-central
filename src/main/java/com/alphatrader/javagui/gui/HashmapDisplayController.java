@@ -1,8 +1,5 @@
 package com.alphatrader.javagui.gui;
 
-import com.alphatrader.javagui.AppState;
-import com.alphatrader.javagui.data.Company;
-import com.alphatrader.javagui.data.Notification;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;

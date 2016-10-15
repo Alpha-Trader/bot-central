@@ -1,9 +1,9 @@
 package com.alphatrader.javagui.control;
 
 import com.alphatrader.javagui.AppState;
-import com.alphatrader.javagui.data.Company;
-import com.alphatrader.javagui.data.Notification;
 import com.alphatrader.javagui.estimation.Estimator;
+import com.alphatrader.rest.Company;
+import com.alphatrader.rest.Notification;
 import javafx.application.Platform;
 
 import java.util.*;

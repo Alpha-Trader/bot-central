@@ -1,6 +1,6 @@
 package com.alphatrader.javagui.behaviour;
 
-import com.alphatrader.javagui.data.Company;
+import com.alphatrader.rest.Company;
 
 /**
  * This interface allows the user to define different behaviours for different events.

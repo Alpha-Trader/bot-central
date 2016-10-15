@@ -1,6 +1,6 @@
 package com.alphatrader.javagui.gui;
 
-import com.alphatrader.javagui.data.User;
+import com.alphatrader.rest.User;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -47,7 +47,7 @@ public class LoginDialog extends Dialog<User> {
 
         this.getDialogPane().setContent(grid);
 
-        Platform.runLater(() -> username.requestFocus());
+        Platform.runLater(username::requestFocus);
 
         this.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {

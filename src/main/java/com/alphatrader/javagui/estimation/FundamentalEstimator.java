@@ -1,7 +1,7 @@
 package com.alphatrader.javagui.estimation;
 
-import com.alphatrader.javagui.data.Company;
-import com.alphatrader.javagui.data.Position;
+import com.alphatrader.rest.Company;
+import com.alphatrader.rest.Position;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +23,12 @@ class FundamentalEstimator extends Estimator {
         this.companies = companies;
         securityEstimation = new HashMap<>();
         this.companies.stream().forEach(company -> {
-            Double value = company.getPortfolio().getPositions().stream().map(Position::getVolume).reduce(0.0, (a, b) -> (a + b));
+            Double value = company
+                .getPortfolio()
+                .getPositions()
+                .stream()
+                .map(Position::getVolume)
+                .reduce(0.0, (a, b) -> (a + b));
             value += company.getCash();
             securityEstimation.put(company.getSecurityIdentifier(), value / company.getOutstandingShares());
         });
