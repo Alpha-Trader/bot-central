@@ -1,6 +1,7 @@
 package com.alphatrader.javagui.data;
 
 import com.alphatrader.javagui.AppState;
+import com.alphatrader.javagui.data.util.ATHttp;
 import com.alphatrader.javagui.data.util.LocalDateTimeDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -40,10 +41,7 @@ public class Portfolio {
     public static Portfolio getCompanyPortfolio(Company company) {
         Portfolio myReturn = null;
         try {
-            HttpResponse<JsonNode> response = Unirest.get(AppState.getInstance().getApiUrl() + "/api/portfolios/" + company.getSecuritiesAccountId())
-                .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
-                .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
-
+            HttpResponse<JsonNode> response = ATHttp.getInstance().get("/api/portfolios/");
             myReturn = gson.fromJson(response.getBody().getObject().toString(), Portfolio.class);
         } catch (UnirestException ue) {
             System.err.println("Error fetching portfolio for company " + company.getName());

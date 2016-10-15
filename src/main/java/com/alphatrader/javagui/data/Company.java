@@ -1,18 +1,13 @@
 package com.alphatrader.javagui.data;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.DoubleSummaryStatistics;
 import java.util.List;
-import java.util.Map;
 
 import com.alphatrader.javagui.AppState;
+import com.alphatrader.javagui.data.util.ATHttp;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -46,10 +41,7 @@ public class Company {
         List<Company> myReturn = new ArrayList<>();
 
         try {
-            HttpResponse<JsonNode> response = Unirest.get(AppState.getInstance().getApiUrl() + "/api/companies/")
-                .header("accept", "*/*").header("Authorization", "Bearer " + user.getToken())
-                .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
-
+            HttpResponse<JsonNode> response = ATHttp.getInstance().get("/api/companies/");
             String companyNodes = response.getBody().getArray().toString();
             myReturn = gson.fromJson(companyNodes, listType);
         } catch (UnirestException e) {
@@ -67,9 +59,7 @@ public class Company {
         List<Company> myReturn = new ArrayList<>();
         try {
             long start = System.nanoTime();
-            HttpResponse<JsonNode> response = Unirest.get(AppState.getInstance().getApiUrl() + "/api/companies/all/")
-                .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
-                .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
+            HttpResponse<JsonNode> response = ATHttp.getInstance().get("/api/companies/all/");
             long end1 = System.nanoTime();
 
             String companyNodes = response.getBody().getArray().toString();

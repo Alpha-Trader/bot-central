@@ -1,14 +1,28 @@
 package com.alphatrader.javagui.data;
 
-import org.json.JSONObject;
+import com.alphatrader.javagui.data.util.ATHttp;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import org.apache.http.HttpResponseFactory;
+import org.apache.http.HttpStatus;
+import org.apache.http.HttpVersion;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.DefaultHttpResponseFactory;
+import org.apache.http.message.BasicStatusLine;
+import org.json.JSONArray;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Test case for the {@link Bond} class.
@@ -70,9 +84,28 @@ public class BondTest {
 
     private Bond toTest;
 
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+        HttpResponseFactory factory = new DefaultHttpResponseFactory();
+        org.apache.http.HttpResponse response = factory.newHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, null), null);
+        response.setEntity(new StringEntity("[" + JSON + "]"));
+        HttpResponse<JsonNode> httpResponse = new HttpResponse<JsonNode>(response, JsonNode.class);
+
+        ATHttp mockHttp = mock(ATHttp.class);
+        when(mockHttp.get(any(String.class))).thenReturn(httpResponse);
+        ATHttp.setInstance(mockHttp);
+    }
+
     @Before
     public void setUp() throws Exception {
         toTest = Bond.createFromJson(JSON);
+    }
+
+    @Test
+    public void testGetAllBonds() {
+        List<Bond> bonds = Bond.getAllBonds();
+        assertEquals(1, bonds.size());
+        assertEquals(Bond.createFromJson(JSON), bonds.get(0));
     }
 
     @Test

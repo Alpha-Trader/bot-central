@@ -1,6 +1,7 @@
 package com.alphatrader.javagui.data;
 
 import com.alphatrader.javagui.AppState;
+import com.alphatrader.javagui.data.util.ATHttp;
 import com.alphatrader.javagui.data.util.LocalDateTimeDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,7 +36,6 @@ public class Bond {
      * List type for gson deserialization.
      */
     private static final Type listType = new TypeToken<ArrayList<Bond>>(){}.getType();
-
     /**
      * Fetches all bonds currently on the market from the server.
      *
@@ -45,14 +45,9 @@ public class Bond {
         List<Bond> myReturn = new ArrayList<>();
 
         try {
-            HttpResponse<JsonNode> response = Unirest.get(AppState.getInstance().getApiUrl() + "/api/bonds/")
-                .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
-                .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
-
+            HttpResponse<JsonNode> response = ATHttp.getInstance().get("/api/bonds/");
             String bonds = response.getBody().getArray().toString();
-
             myReturn = gson.fromJson(bonds, listType);
-
         } catch (UnirestException e) {
             System.err.println("Error fetching bonds : " + e.getMessage());
         }
@@ -156,5 +151,34 @@ public class Bond {
             ", faceValue=" + faceValue +
             ", maturityDate=" + maturityDate +
             '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Bond bond = (Bond) o;
+
+        if (volume != bond.volume) return false;
+        if (Double.compare(bond.interestRate, interestRate) != 0) return false;
+        if (Double.compare(bond.faceValue, faceValue) != 0) return false;
+        if (name != null ? !name.equals(bond.name) : bond.name != null) return false;
+        return maturityDate != null ? maturityDate.equals(bond.maturityDate) : bond.maturityDate == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = name != null ? name.hashCode() : 0;
+        result = 31 * result + volume;
+        temp = Double.doubleToLongBits(interestRate);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(faceValue);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (maturityDate != null ? maturityDate.hashCode() : 0);
+        return result;
     }
 }

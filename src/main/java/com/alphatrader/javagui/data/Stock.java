@@ -10,6 +10,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alphatrader.javagui.data.util.ATHttp;
 import com.alphatrader.javagui.data.util.LocalDateTimeDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -49,11 +50,7 @@ public class Stock {
         List<Stock> myReturn = new ArrayList<>();
 
         try {
-            HttpResponse<JsonNode> response = Unirest.get(AppState.getInstance().getApiUrl() + "/api/listings/")
-                .header("accept", "*/*")
-                .header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
-                .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
-
+            HttpResponse<JsonNode> response = ATHttp.getInstance().get("/api/listings/");
             String listings = response.getBody().getArray().toString();
             myReturn = gson.fromJson(listings, listType);
         } catch (UnirestException e) {

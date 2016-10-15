@@ -1,6 +1,5 @@
 package com.alphatrader.javagui.data;
 
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,12 +10,12 @@ import java.time.ZoneId;
 import static org.junit.Assert.*;
 
 /**
- * Testcase for the {@link UnfilledOrder} class.
+ * Testcase for the {@link Order} class.
  *
  * @author Christopher Guckes (christopher.guckes@torq-dev.de)
  * @version 1.0
  */
-public class UnfilledOrderTest {
+public class OrderTest {
     private static final String JSON = "{\n" +
         "    \"counterPartyName\": null,\n" +
         "    \"creationDate\": 1475619375635,\n" +
@@ -39,11 +38,11 @@ public class UnfilledOrderTest {
         "    \"type\": \"LIMIT\"\n" +
         "  }";
 
-    private UnfilledOrder toTest;
+    private Order toTest;
 
     @Before
     public void setUp() {
-        toTest = UnfilledOrder.createFromJson(JSON);
+        toTest = Order.createFromJson(JSON);
     }
 
     @Test
