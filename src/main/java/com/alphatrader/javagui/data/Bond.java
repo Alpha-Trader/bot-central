@@ -1,6 +1,10 @@
 package com.alphatrader.javagui.data;
 
 import com.alphatrader.javagui.AppState;
+import com.alphatrader.javagui.data.util.LocalDateTimeDeserializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -8,6 +12,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -22,6 +27,16 @@ import java.util.List;
  */
 public class Bond {
     /**
+     * Gson instance for deserialization.
+     */
+    private static final Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer()).create();
+
+    /**
+     * List type for gson deserialization.
+     */
+    private static final Type listType = new TypeToken<ArrayList<Bond>>(){}.getType();
+
+    /**
      * Fetches all bonds currently on the market from the server.
      *
      * @return all bonds on the market
@@ -34,12 +49,9 @@ public class Bond {
                 .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
                 .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
 
-            JSONArray bonds = response.getBody().getArray();
+            String bonds = response.getBody().getArray().toString();
 
-            for (int i = 0; i < bonds.length(); i++) {
-                //System.out.println(bonds.getJSONObject(i).toString(2));
-                myReturn.add(Bond.createFromJson(bonds.getJSONObject(i)));
-            }
+            myReturn = gson.fromJson(bonds, listType);
 
         } catch (UnirestException e) {
             System.err.println("Error fetching bonds : " + e.getMessage());
@@ -54,16 +66,8 @@ public class Bond {
      * @param json the json object you want to parse.
      * @return the parsed bond
      */
-    public static Bond createFromJson(JSONObject json) {
-        Bond myReturn = new Bond(
-            json.getString("name"),
-            json.getInt("volume"),
-            json.getDouble("interestRate"),
-            json.getDouble("faceValue"),
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(json.getLong("maturityDate")), ZoneId.systemDefault())
-        );
-
-        return myReturn;
+    public static Bond createFromJson(String json) {
+        return gson.fromJson(json, Bond.class);
     }
 
     /**

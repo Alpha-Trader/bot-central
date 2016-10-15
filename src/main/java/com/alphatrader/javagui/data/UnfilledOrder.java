@@ -3,12 +3,17 @@
  */
 package com.alphatrader.javagui.data;
 
+import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alphatrader.javagui.data.util.LocalDateTimeDeserializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,6 +28,29 @@ import com.mashape.unirest.http.exceptions.UnirestException;
  */
 public class UnfilledOrder {
     /**
+     * Listing class necessary for gson deserialization.
+     *
+     * @author Christopher Guckes
+     * @version 1.0
+     */
+    private static final class Listing {
+        /**
+         * The name of the company which shares you are buying.
+         */
+        String name;
+    }
+
+    /**
+     * Gson instance for deserialization.
+     */
+    private static final Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer()).create();
+
+    /**
+     * List type for gson deserialization.
+     */
+    private static final Type listType = new TypeToken<ArrayList<UnfilledOrder>>(){}.getType();
+
+    /**
      * Fetches all unfilled orders  of the user
      *
      * @return all unfilled orders
@@ -35,12 +63,8 @@ public class UnfilledOrder {
                 .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
                 .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
 
-
-            JSONArray unfilledOrders = response.getBody().getArray();
-
-            for (int i = 0; i < unfilledOrders.length(); i++) {
-                myReturn.add(UnfilledOrder.createFromJson(unfilledOrders.getJSONObject(i)));
-            }
+            String unfilledOrders = response.getBody().getArray().toString();
+            myReturn = gson.fromJson(unfilledOrders, listType);
 
         } catch (UnirestException e) {
             System.err.println("Error fetching unfilled Orders: " + e.getMessage());
@@ -52,15 +76,8 @@ public class UnfilledOrder {
     /**
      * Creates a UnfilledOrder from the api json answers
      */
-    public static UnfilledOrder createFromJson(JSONObject json) {
-        UnfilledOrder myReturn = new UnfilledOrder(
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(json.getLong("creationDate")), ZoneId.systemDefault()),
-            json.getJSONObject("listing").getString("name"),
-            json.getJSONObject("listing").getString("securityIdentifier"),
-            json.getJSONObject("listing").getString("type"),
-            json.getInt("numberOfShares")
-        );
-        return myReturn;
+    public static UnfilledOrder createFromJson(String json) {
+        return gson.fromJson(json, UnfilledOrder.class);
     }
 
     /**
@@ -71,7 +88,7 @@ public class UnfilledOrder {
     /**
      * Name of Security
      */
-    private String name;
+    private Listing listing = new Listing();
     /**
      * Type of Security
      */
@@ -91,7 +108,7 @@ public class UnfilledOrder {
 
     public UnfilledOrder(LocalDateTime creationDate, String name, String securityIdentifier, String type, int numberOfShares) {
         this.creationDate = creationDate;
-        this.name = name;
+        this.listing.name = name;
         this.type = type;
         this.numberOfShares = numberOfShares;
         this.securityIdentifier = securityIdentifier;
@@ -100,7 +117,7 @@ public class UnfilledOrder {
     @Override
     public String toString() {
         return "UnfilledOrder{" +
-            "name='" + name + '\'' +
+            "name='" + listing.name + '\'' +
             ", creationDate=" + creationDate +
             ", type=" + type +
             ", volume=" + volume +
@@ -114,8 +131,7 @@ public class UnfilledOrder {
      * @return the name
      */
     public String getName() {
-
-        return name;
+        return listing.name;
     }
 
     /**

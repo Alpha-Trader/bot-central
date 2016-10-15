@@ -1,11 +1,15 @@
 package com.alphatrader.javagui.data;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 
 import com.alphatrader.javagui.AppState;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +27,16 @@ import com.mashape.unirest.http.exceptions.UnirestException;
  */
 public class Company {
     /**
+     * Gson instance for deserialization.
+     */
+    private static final Gson gson = new Gson();
+
+    /**
+     * List type for gson deserialization.
+     */
+    private static final Type listType = new TypeToken<ArrayList<Company>>(){}.getType();
+
+    /**
      * Fetches all companies currently employing the given user as a CEO.
      *
      * @param user the user who governs the company
@@ -36,11 +50,8 @@ public class Company {
                 .header("accept", "*/*").header("Authorization", "Bearer " + user.getToken())
                 .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
 
-            JSONArray companyNodes = response.getBody().getArray();
-
-            for (int i = 0; i < companyNodes.length(); i++) {
-                myReturn.add(Company.createFromJson(companyNodes.getJSONObject(i)));
-            }
+            String companyNodes = response.getBody().getArray().toString();
+            myReturn = gson.fromJson(companyNodes, listType);
         } catch (UnirestException e) {
             System.err.println("Error fetching companies: " + e.getMessage());
         }
@@ -61,16 +72,14 @@ public class Company {
                 .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
             long end1 = System.nanoTime();
 
-            JSONArray companyNodes = response.getBody().getArray();
+            String companyNodes = response.getBody().getArray().toString();
             long end2 = System.nanoTime();
 
-            for (int i = 0; i < companyNodes.length(); i++) {
-                myReturn.add(Company.createFromJson(companyNodes.getJSONObject(i)));
-            }
+            myReturn = gson.fromJson(companyNodes, listType);
             long end3 = System.nanoTime();
 
-            System.out.println("API-Call: " + (end1 - start) + "ns\nGetting array: " + (end2 - end1) + "ns\nParsing: "
-                + (end3 - end2) + "ns");
+            System.out.println("API-Call: " + (end1 - start)/1E6 + "ms\nGetting array: " + (end2 - end1)/1E6 + "ms\nParsing: "
+                + (end3 - end2)/1E6 + "ms");
 
         } catch (UnirestException e) {
             System.err.println("Error fetching companies: " + e.getMessage());
@@ -86,32 +95,8 @@ public class Company {
      * @param json the json object you want to parse
      * @return the parsed company
      */
-    public static Company createFromJson(JSONObject json) {
-        Company myReturn = null;
-        try {
-            HttpResponse<JsonNode> response = Unirest.get(
-                AppState.getInstance().getApiUrl() + "/api/companyprofiles/" + json.getString("id"))
-                .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
-                .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
-
-            int outstandingShares = response.getBody().getObject().getInt("outstandingShares");
-
-            myReturn = new Company(
-                json.getString("id"),
-                json.getString("name"),
-                json.getJSONObject("listing")
-                    .getString("securityIdentifier"),
-                json.getString("securitiesAccountId"),
-                json.getJSONObject("bankAccount").getDouble("cash"),
-                outstandingShares
-            );
-        } catch (JSONException je) {
-            je.printStackTrace();
-            System.out.println(json.toString(2));
-        } catch (UnirestException ue) {
-            ue.printStackTrace();
-        }
-        return myReturn;
+    public static Company createFromJson(String json) {
+        return gson.fromJson(json, Company.class);
     }
 
     /**
@@ -237,5 +222,13 @@ public class Company {
      */
     public void setPortfolio(Portfolio portfolio) {
         this.portfolio = portfolio;
+    }
+
+    /**
+     * Sets the outstanding shares to the new value.
+     * @param outstandingShares the number of outstanding shares
+     */
+    public void setOutstandingShares(int outstandingShares) {
+        this.outstandingShares = outstandingShares;
     }
 }

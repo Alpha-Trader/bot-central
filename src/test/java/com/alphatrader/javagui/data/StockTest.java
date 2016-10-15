@@ -17,13 +17,13 @@ import static org.junit.Assert.*;
  * @version 1.0
  */
 public class StockTest {
-    private static final JSONObject JSON = new JSONObject("{\n" +
+    private static final String JSON = "{\n" +
         "    \"startDate\": 1469950288064,\n" +
         "    \"endDate\": null,\n" +
         "    \"securityIdentifier\": \"STS63548\",\n" +
         "    \"name\": \"Solid Profit AG\",\n" +
         "    \"type\": \"STOCK\"\n" +
-        "  },");
+        "  }";
 
     private Stock toTest;
 

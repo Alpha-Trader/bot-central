@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  * @version 1.0
  */
 public class BondTest {
-    private static final JSONObject JSON = new JSONObject("{\n" +
+    private static final String JSON = "{\n" +
         "    \"priceSpread\": {\n" +
         "      \"askSize\": 10,\n" +
         "      \"bidPrice\": null,\n" +
@@ -66,7 +66,7 @@ public class BondTest {
         "    },\n" +
         "    \"name\": \"Steffen Inc. 2.0500% 13/10/2016\",\n" +
         "    \"id\": \"8213bee0-b64a-46b8-bb9b-99ea7f67991d\"\n" +
-        "  }");
+        "  }";
 
     private Bond toTest;
 

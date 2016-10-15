@@ -3,12 +3,17 @@
  */
 package com.alphatrader.javagui.data;
 
+import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alphatrader.javagui.data.util.LocalDateTimeDeserializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -26,6 +31,16 @@ import com.mashape.unirest.http.exceptions.UnirestException;
  */
 public class Stock {
     /**
+     * Gson instance for deserialization.
+     */
+    private static final Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer()).create();
+
+    /**
+     * List type for gson deserialization.
+     */
+    private static final Type listType = new TypeToken<ArrayList<Stock>>(){}.getType();
+
+    /**
      * Fetches all listings currently on the market from the server.
      *
      * @return all listings on the market
@@ -39,11 +54,8 @@ public class Stock {
                 .header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
                 .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
 
-            JSONArray listings = response.getBody().getArray();
-            for (int i = 0; i < listings.length(); i++) {
-                // System.out.println(bonds.getJSONObject(i).toString(2));
-                myReturn.add(Stock.createFromJson(listings.getJSONObject(i)));
-            }
+            String listings = response.getBody().getArray().toString();
+            myReturn = gson.fromJson(listings, listType);
         } catch (UnirestException e) {
             System.err.println("Error fetching bonds : " + e.getMessage());
         }
@@ -56,12 +68,8 @@ public class Stock {
      * @param json the json object you want to parse
      * @return the parsed stock
      */
-
-    public static Stock createFromJson(JSONObject json) {
-        Stock myReturn = new Stock(json.getString("name"), json.getString("securityIdentifier"),
-        		LocalDateTime.ofInstant(Instant.ofEpochMilli(json.getLong("startDate")), ZoneId.systemDefault())
-    );
-    return myReturn; 
+    public static Stock createFromJson(String json) {
+        return gson.fromJson(json, Stock.class);
     }
 
     /**

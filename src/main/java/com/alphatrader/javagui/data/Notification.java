@@ -1,16 +1,16 @@
 package com.alphatrader.javagui.data;
 
-import java.time.Instant;
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.alphatrader.javagui.data.util.LocalDateTimeDeserializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import com.alphatrader.javagui.AppState;
-import com.alphatrader.javagui.data.Bond;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -20,6 +20,26 @@ import com.mashape.unirest.http.exceptions.UnirestException;
  * @author frangelo
  */
 public class Notification {
+    /**
+     * Content wrapper class used for gson deserialization.
+     *
+     * @author Christopher Guckes
+     * @version 1.0
+     */
+    private static final class Content {
+        String filledString = "";
+    }
+
+    /**
+     * Gson instance for deserialization.
+     */
+    private static final Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer()).create();
+
+    /**
+     * List type for gson deserialization.
+     */
+    private static final Type listType = new TypeToken<ArrayList<Notification>>(){}.getType();
+
     /**
      * Fetches all unread events of the user and marks them as read
      *
@@ -33,13 +53,9 @@ public class Notification {
                 .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
                 .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
 
+            String notifications = response.getBody().getArray().toString();
 
-            JSONArray notifications = response.getBody().getArray();
-
-            for (int i = 0; i < notifications.length(); i++) {
-                myReturn.add(Notification.createFromJson(notifications.getJSONObject(i)));
-            }
-
+            myReturn = gson.fromJson(notifications, listType);
         } catch (UnirestException e) {
             System.err.println("Error fetching notifications: " + e.getMessage());
         }
@@ -50,12 +66,8 @@ public class Notification {
     /**
      * Creates a Notification from the api json answers and marks it as read
      */
-    public static Notification createFromJson(JSONObject json) {
-        Notification myReturn = new Notification(
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(json.getLong("date")), ZoneId.systemDefault()),
-            json.getJSONObject("content").getString("filledString")
-        );
-        return myReturn;
+    public static Notification createFromJson(String json) {
+        return gson.fromJson(json, Notification.class);
     }
 
     /**
@@ -73,9 +85,9 @@ public class Notification {
     }
 
     /**
-     * The message of the notification.
+     * The content of the notification.
      */
-    private String message;
+    private final Content content = new Content();
 
     /**
      * The date and time the notification was created.
@@ -86,17 +98,17 @@ public class Notification {
      * Creates a unread Notification with the given parameters
      *
      * @param date the date this notification was created
-     * @param message the message.
+     * @param message the content.
      */
     public Notification(LocalDateTime date, String message) {
         this.date = date;
-        this.message = message;
+        this.content.filledString = message;
     }
 
     @Override
     public String toString() {
         return "Notification{" +
-            "message='" + message + '\'' +
+            "content='" + content.filledString + '\'' +
             ", date=" + date +
             '}';
     }
@@ -105,7 +117,7 @@ public class Notification {
      * @return the Message
      */
     public String getMessage() {
-        return message;
+        return content.filledString;
     }
 
 }

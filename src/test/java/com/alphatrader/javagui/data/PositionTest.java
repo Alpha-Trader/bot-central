@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
  * @version 1.0
  */
 public class PositionTest {
-    private static final JSONObject JSON = new JSONObject("{\n" +
+    private static final String JSON = "{\n" +
         "      \"currentAskPrice\": 3500,\n" +
         "      \"currentAskSize\": 850,\n" +
         "      \"currentBidPrice\": null,\n" +
@@ -34,7 +34,7 @@ public class PositionTest {
         "        \"type\": \"STOCK\"\n" +
         "      },\n" +
         "      \"type\": \"STOCK\"\n" +
-        "    }");
+        "    }";
 
     private Position toTest;
 

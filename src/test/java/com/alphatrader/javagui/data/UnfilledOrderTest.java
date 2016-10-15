@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  * @version 1.0
  */
 public class UnfilledOrderTest {
-    private static final JSONObject JSON = new JSONObject("{\n" +
+    private static final String JSON = "{\n" +
         "    \"counterPartyName\": null,\n" +
         "    \"creationDate\": 1475619375635,\n" +
         "    \"committedCash\": 787.18,\n" +
@@ -37,7 +37,7 @@ public class UnfilledOrderTest {
         "    \"owner\": \"26ea411d-f873-4976-80c4-09e3f1cdabea\",\n" +
         "    \"id\": \"a7859ce3-75d0-44fd-98ab-bfc77aa205d5\",\n" +
         "    \"type\": \"LIMIT\"\n" +
-        "  }");
+        "  }";
 
     private UnfilledOrder toTest;
 
@@ -59,7 +59,7 @@ public class UnfilledOrderTest {
 
     @Test
     public void testGetType() throws Exception {
-        assertEquals("STOCK", toTest.getType());
+        assertEquals("LIMIT", toTest.getType());
     }
 
     @Test

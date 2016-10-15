@@ -1,6 +1,12 @@
 package com.alphatrader.javagui.data;
 
 import com.alphatrader.javagui.AppState;
+import com.alphatrader.javagui.data.util.LocalDateTimeDeserializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -8,6 +14,8 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +26,10 @@ import java.util.List;
  * @version 1.0
  */
 public class Portfolio {
+    /**
+     * Gson instance for deserialization.
+     */
+    private static final Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer()).create();
 
     /**
      * Fetches a company's portfolio from the server.
@@ -32,8 +44,7 @@ public class Portfolio {
                 .header("accept", "*/*").header("Authorization", "Bearer " + AppState.getInstance().getUser().getToken())
                 .header("X-Authorization", "e1d149fb-0b2a-4cf5-9ef7-17749bf9d144").asJson();
 
-            myReturn = createFromJson(response.getBody().getObject());
-
+            myReturn = gson.fromJson(response.getBody().getObject().toString(), Portfolio.class);
         } catch (UnirestException ue) {
             System.err.println("Error fetching portfolio for company " + company.getName());
             ue.printStackTrace();
@@ -49,16 +60,10 @@ public class Portfolio {
      * @return the parsed portfolio
      */
     public static Portfolio createFromJson(JSONObject json) {
-        List<Position> positions = new ArrayList<>();
+        Type positionListType = new TypeToken<ArrayList<Position>>(){}.getType();
 
-        JSONArray positionsJson = json.getJSONArray("positions");
-        for (int i = 0; i < positionsJson.length(); i++) {
-            Position toAdd = Position.createFromJson(positionsJson.getJSONObject(i));
-
-            if (toAdd != null) {
-                positions.add(toAdd);
-            }
-        }
+        String positionsJson = json.getJSONArray("positions").toString();
+        List<Position> positions = gson.fromJson(positionsJson, positionListType);
 
         return new Portfolio(json.getDouble("cash"), json.getDouble("committedCash"), positions);
     }
@@ -91,6 +96,9 @@ public class Portfolio {
         this.positions = positions;
     }
 
+    /**
+     * @return a list of all positions in this portfolio
+     */
     public List<Position> getPositions() {
         return positions;
     }
