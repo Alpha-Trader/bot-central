@@ -18,9 +18,10 @@ class FundamentalEstimator extends Estimator {
 
     private Map<String, Double> securityEstimation = new HashMap<>();
 
+
     @Override
     public void refresh(List<Company> companies) {
-        this.companies = companies;
+       /* this.companies = companies;
         securityEstimation = new HashMap<>();
         this.companies.stream().forEach(company -> {
             Double value = company
@@ -29,16 +30,15 @@ class FundamentalEstimator extends Estimator {
                 .stream()
                 .map(Position::getVolume)
                 .reduce(0.0, (a, b) -> (a + b));
-            value += company.getCash();
             securityEstimation.put(company.getSecurityIdentifier(), value / company.getOutstandingShares());
         });
 
-        recursiveEvaluation();
+        recursiveEvaluation(); */
     }
 
     @Override
     public Double evaluate(Company company) {
-        Double myReturn = null;
+        /*Double myReturn = null;
 
         // If the company we are looking for doesn't exist in the map, we return Double.NaN.
         if (!securityEstimation.containsKey(company.getSecurityIdentifier())) {
@@ -47,11 +47,12 @@ class FundamentalEstimator extends Estimator {
             myReturn = securityEstimation.get(company.getSecurityIdentifier());
         }
 
-        return myReturn;
+        return myReturn;*/
+        return Double.NaN;
     }
 
     private void recursiveEvaluation() {
-        for (int i = 0; i < ITERATIONS; i++) {
+        /*for (int i = 0; i < ITERATIONS; i++) {
             companies.forEach(company -> {
                 Double value = company
                     .getPortfolio()
@@ -71,6 +72,6 @@ class FundamentalEstimator extends Estimator {
                 value /= (double) company.getOutstandingShares();
                 securityEstimation.put(company.getSecurityIdentifier(), value);
             });
-        }
+        }*/
     }
 }

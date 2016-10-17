@@ -135,8 +135,8 @@ public class MainWindowController {
      */
     private void displayCompany(Company company) {
         if(company != null) {
-            companyNameLabel.setText(company.getName() + " - " + company.getSecurityIdentifier());
-            cashLabel.setText("Cash: " + String.format("%.02f", company.getCash()));
+            companyNameLabel.setText(company.getName());
+            cashLabel.setText("Cash: " + String.format("%.02f", Double.NaN));
             stockValueLabel.setText("est. Stock Value: "
                 + String.format("%.02f", Estimator.get(Estimator.EstimatorType.FUNDAMENTAL).evaluate(company)));
         }

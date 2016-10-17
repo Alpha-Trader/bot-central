@@ -56,7 +56,7 @@
 
         <dependency>
             <groupId>com.alphatrader.rest</groupId>
-            <artifactId>atrest-java</artifactId>
+            <artifactId>java-lib</artifactId>
             <version>0.9.0</version>
         </dependency>
 	</dependencies>
