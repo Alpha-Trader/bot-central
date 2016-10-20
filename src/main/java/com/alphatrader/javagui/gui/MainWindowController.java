@@ -4,6 +4,7 @@ import com.alphatrader.javagui.AppState;
 import com.alphatrader.javagui.estimation.Estimator;
 import com.alphatrader.rest.Company;
 import com.alphatrader.rest.Notification;
+import com.alphatrader.rest.Portfolio;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -136,7 +137,7 @@ public class MainWindowController {
     private void displayCompany(Company company) {
         if(company != null) {
             companyNameLabel.setText(company.getName());
-            cashLabel.setText("Cash: " + String.format("%.02f", Double.NaN));
+            //cashLabel.setText("Cash: " + String.format("%.02f", Portfolio.getCompanyPortfolio(company).getCash()));
             stockValueLabel.setText("est. Stock Value: "
                 + String.format("%.02f", Estimator.get(Estimator.EstimatorType.FUNDAMENTAL).evaluate(company)));
         }

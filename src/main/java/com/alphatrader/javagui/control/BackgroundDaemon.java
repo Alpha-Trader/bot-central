@@ -4,6 +4,7 @@ import com.alphatrader.javagui.AppState;
 import com.alphatrader.javagui.estimation.Estimator;
 import com.alphatrader.rest.Company;
 import com.alphatrader.rest.Notification;
+import com.alphatrader.rest.SecuritySponsorship;
 import javafx.application.Platform;
 
 import java.util.*;
@@ -74,7 +75,7 @@ public class BackgroundDaemon {
     }
 
     public void start() {
-        //this.timer.schedule(new UpdateNotificationsTask(), 0, UpdateNotificationsTask.interval);
+        this.timer.schedule(new UpdateNotificationsTask(), 0, UpdateNotificationsTask.interval);
         //this.timer.schedule(new UpdateCompanyValuation(), 0, UpdateCompanyValuation.interval);
     }
 }
