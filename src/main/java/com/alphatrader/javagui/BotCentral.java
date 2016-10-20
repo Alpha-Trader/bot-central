@@ -38,7 +38,9 @@ public class BotCentral extends Application {
      */
     @Override
     public void start(final Stage stage) throws Exception {
-        ApiLibConfig.getInstance().setApiUrl(new URL(AppState.getInstance().getApiUrl()));
+        ApiLibConfig config = ApiLibConfig.getInstance();
+        config.setApiUrl(new URL(AppState.getInstance().getApiUrl()));
+        config.setPartnerId("e1d149fb-0b2a-4cf5-9ef7-17749bf9d144");
 
         // Ask for login parameters
         Optional<User> userOpt = (new LoginDialog().showAndWait());
@@ -47,7 +49,7 @@ public class BotCentral extends Application {
         userOpt.ifPresent(user -> {
             user.login();
             // TODO: Check if login succeeded
-            AppState.getInstance().setUser(user);
+            config.setUser(user);
             startBackgroundDaemon();
             startGui(stage);
         });

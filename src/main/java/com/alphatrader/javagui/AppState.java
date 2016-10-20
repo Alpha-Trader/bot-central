@@ -6,15 +6,8 @@ package com.alphatrader.javagui;
 import com.alphatrader.rest.Notification;
 import com.alphatrader.rest.User;
 import com.alphatrader.rest.util.ApiLibConfig;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Stores the state of the app. Implemented as a singleton to make sure, every

@@ -98,7 +98,7 @@ public class MainWindowController {
     private void refresh() {
         this.companyListView.itemsProperty().setValue(
             FXCollections.observableList(
-                Company.getAllUserCompanies(AppState.getInstance().getUser())
+                Company.getAllUserCompanies()
             )
         );
     }
