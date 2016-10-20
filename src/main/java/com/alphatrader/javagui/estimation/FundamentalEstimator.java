@@ -21,7 +21,7 @@ class FundamentalEstimator extends Estimator {
 
     @Override
     public void refresh(List<Company> companies) {
-       /* this.companies = companies;
+       this.companies = companies;
         securityEstimation = new HashMap<>();
         this.companies.stream().forEach(company -> {
             Double value = company
@@ -30,29 +30,28 @@ class FundamentalEstimator extends Estimator {
                 .stream()
                 .map(Position::getVolume)
                 .reduce(0.0, (a, b) -> (a + b));
-            securityEstimation.put(company.getSecurityIdentifier(), value / company.getOutstandingShares());
+            securityEstimation.put(company.getListing().getSecurityIdentifier(), value / company.getProfile().getOutstandingShares());
         });
 
-        recursiveEvaluation(); */
+        recursiveEvaluation();
     }
 
     @Override
     public Double evaluate(Company company) {
-        /*Double myReturn = null;
+        Double myReturn = null;
 
         // If the company we are looking for doesn't exist in the map, we return Double.NaN.
-        if (!securityEstimation.containsKey(company.getSecurityIdentifier())) {
+        if (!securityEstimation.containsKey(company.getListing().getSecurityIdentifier())) {
             myReturn = Double.NaN;
         } else {
-            myReturn = securityEstimation.get(company.getSecurityIdentifier());
+            myReturn = securityEstimation.get(company.getListing().getSecurityIdentifier());
         }
 
-        return myReturn;*/
-        return Double.NaN;
+        return myReturn;
     }
 
     private void recursiveEvaluation() {
-        /*for (int i = 0; i < ITERATIONS; i++) {
+        for (int i = 0; i < ITERATIONS; i++) {
             companies.forEach(company -> {
                 Double value = company
                     .getPortfolio()
@@ -69,9 +68,9 @@ class FundamentalEstimator extends Estimator {
                     )
                     .reduce(0.0, (a, b) -> (a + b));
 
-                value /= (double) company.getOutstandingShares();
-                securityEstimation.put(company.getSecurityIdentifier(), value);
+                value /= (double) company.getProfile().getOutstandingShares();
+                securityEstimation.put(company.getListing().getSecurityIdentifier(), value);
             });
-        }*/
+        }
     }
 }

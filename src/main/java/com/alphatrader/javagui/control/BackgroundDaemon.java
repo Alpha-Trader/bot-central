@@ -76,6 +76,6 @@ public class BackgroundDaemon {
 
     public void start() {
         this.timer.schedule(new UpdateNotificationsTask(), 0, UpdateNotificationsTask.interval);
-        //this.timer.schedule(new UpdateCompanyValuation(), 0, UpdateCompanyValuation.interval);
+        this.timer.schedule(new UpdateCompanyValuation(), 0, UpdateCompanyValuation.interval);
     }
 }
