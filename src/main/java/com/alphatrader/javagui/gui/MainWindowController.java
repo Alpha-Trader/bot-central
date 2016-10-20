@@ -78,7 +78,7 @@ public class MainWindowController {
             protected void updateItem(Notification notification, boolean empty) {
                 super.updateItem(notification, empty);
                 if (notification != null) {
-                    Text text = new Text(notification.getMessage());
+                    Text text = new Text(notification.getMessage().getFilledString());
                     text.setWrappingWidth(e.getPrefWidth() * 0.9);
                     setGraphic(text);
                 }

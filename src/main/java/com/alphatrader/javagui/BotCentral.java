@@ -7,7 +7,7 @@ import java.util.Optional;
 import com.alphatrader.javagui.control.BackgroundDaemon;
 import com.alphatrader.javagui.gui.LoginDialog;
 import com.alphatrader.rest.User;
-import com.alphatrader.rest.util.Config;
+import com.alphatrader.rest.util.ApiLibConfig;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -38,7 +38,7 @@ public class BotCentral extends Application {
      */
     @Override
     public void start(final Stage stage) throws Exception {
-        Config.getInstance().setApiUrl(new URL(AppState.getInstance().getApiUrl()));
+        ApiLibConfig.getInstance().setApiUrl(new URL(AppState.getInstance().getApiUrl()));
 
         // Ask for login parameters
         Optional<User> userOpt = (new LoginDialog().showAndWait());

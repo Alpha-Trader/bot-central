@@ -5,7 +5,7 @@ package com.alphatrader.javagui;
 
 import com.alphatrader.rest.Notification;
 import com.alphatrader.rest.User;
-import com.alphatrader.rest.util.Config;
+import com.alphatrader.rest.util.ApiLibConfig;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -76,7 +76,7 @@ public class AppState {
      */
     public void setUser(User user) {
         this.user = user;
-        Config.getInstance().setUser(user);
+        ApiLibConfig.getInstance().setUser(user);
     }
 
     /**

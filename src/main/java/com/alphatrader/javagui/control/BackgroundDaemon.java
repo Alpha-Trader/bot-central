@@ -35,7 +35,7 @@ public class BackgroundDaemon {
             Platform.runLater(
                 () -> AppState.getInstance().getNotifications().addAll(Notification.getUnreadNotifications())
             );
-            Notification.markAllAsRead();
+            //Notification.markAllAsRead();
         }
     }
 
