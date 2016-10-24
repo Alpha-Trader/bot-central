@@ -8,7 +8,7 @@
 	<repositories>
 		<repository>
 			<id>alpha-trader-repository</id>
-			<url>https://raw.githubusercontent.com/Alpha-Trader/maven-repository/development/</url>
+			<url>https://raw.githubusercontent.com/Alpha-Trader/maven-repository/master/</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
