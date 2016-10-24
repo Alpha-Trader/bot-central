@@ -40,4 +40,6 @@ public abstract class Estimator {
     public abstract void refresh(List<Company> companies);
 
     public abstract Double evaluate(Company company);
+
+    public abstract Map<String, Double> getSecurityEstimations();
 }

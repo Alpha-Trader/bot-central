@@ -1,5 +1,6 @@
 package com.alphatrader.javagui.gui;
 
+import com.alphatrader.javagui.estimation.Estimator;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
@@ -9,6 +10,8 @@ import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  *
@@ -39,9 +42,11 @@ public class HashmapDisplayController {
 
     @FXML
     private void refresh() {
-        // TODO: choose hashmap to display
+        Map<String, Double> prices = Estimator.get(Estimator.EstimatorType.FUNDAMENTAL)
+            .getSecurityEstimations();
+        SortedMap<String, Double> sortedPrices = new TreeMap<>(prices);
         this.hashmapListView.itemsProperty().set(FXCollections.observableList(
-            new ArrayList<>())
-        );
+            new ArrayList<>(sortedPrices.entrySet())
+        ));
     }
 }

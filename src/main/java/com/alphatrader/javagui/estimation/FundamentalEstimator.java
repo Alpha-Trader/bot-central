@@ -3,6 +3,7 @@ package com.alphatrader.javagui.estimation;
 import com.alphatrader.rest.Company;
 import com.alphatrader.rest.Position;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,6 @@ class FundamentalEstimator extends Estimator {
     private static final int ITERATIONS = 10;
 
     private Map<String, Double> securityEstimation = new HashMap<>();
-
 
     @Override
     public void refresh(List<Company> companies) {
@@ -72,5 +72,12 @@ class FundamentalEstimator extends Estimator {
                 securityEstimation.put(company.getListing().getSecurityIdentifier(), value);
             });
         }
+    }
+
+    /**
+     * @return a read-only list of company estimations
+     */
+    public Map<String, Double> getSecurityEstimations() {
+        return Collections.unmodifiableMap(securityEstimation);
     }
 }
