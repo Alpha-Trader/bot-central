@@ -13,7 +13,7 @@ import java.util.*;
 public abstract class Estimator {
     public enum EstimatorType {
         FUNDAMENTAL,
-        TECHICAL
+        CleanFundamental, 
     }
 
     private static Map<EstimatorType, Estimator> estimators = new HashMap<>();
@@ -24,9 +24,11 @@ public abstract class Estimator {
                 case FUNDAMENTAL:
                     estimators.put(type, new FundamentalEstimator());
                     break;
-                case TECHICAL:
+                case CleanFundamental:
                     // create technical estimator here.
-                    break;
+                	estimators.put(type, new CleanFundValue());
+
+                	break;
                 default:
                     break;
             }

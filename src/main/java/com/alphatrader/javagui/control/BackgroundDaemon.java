@@ -60,12 +60,20 @@ public class BackgroundDaemon {
         public void run() {
             final List<Company> companies = Company.getAllCompanies();
 
-            // Get naiive evaluation by just evaluating the company value.
+            // Get naive evaluation by just evaluating the company value.
             Estimator estimator = Estimator.get(Estimator.EstimatorType.FUNDAMENTAL);
             System.out.println("Refreshing");
             estimator.refresh(companies);
             System.out.println("Done");
         }
+    }
+    public void run(){
+    	final List <Company> companies = Company.getAllCompanies();
+    	//get clean naive evaluation by just evaluating the company value minus own company assets
+    	Estimator estimator = Estimator.get(Estimator.EstimatorType.CleanFundamental);
+    	System.out.println("Refreshing");
+    	estimator.refresh(companies);
+    	System.out.println("Done");
     }
 
     private Timer timer;
