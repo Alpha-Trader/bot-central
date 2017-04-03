@@ -1,5 +1,6 @@
 package com.alphatrader.javagui.control;
 
+
 import com.alphatrader.javagui.AppState;
 import com.alphatrader.javagui.estimation.Estimator;
 import com.alphatrader.rest.Company;
